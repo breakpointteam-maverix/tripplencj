@@ -238,6 +238,80 @@ nav.scrolled{
     font-size:0.95rem;
 }
 
+/* ===== PLAYER MODAL ===== */
+
+.player-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.92);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+    padding:30px;
+}
+
+.player-box{
+    width:100%;
+    max-width:1000px;
+    background:#141414;
+    border-radius:20px;
+    overflow:hidden;
+    position:relative;
+    animation:fadeUp 0.4s ease;
+}
+
+.player-box iframe{
+    width:100%;
+    aspect-ratio:16/9;
+    border:none;
+}
+
+.player-info{
+    padding:30px;
+}
+
+.player-info h2{
+    font-size:2rem;
+    margin-bottom:15px;
+}
+
+.movie-meta{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    color:#bbb;
+    margin-bottom:20px;
+}
+
+.player-info p{
+    line-height:1.8;
+    color:#ddd;
+    margin-bottom:20px;
+}
+
+.movie-team{
+    color:#999;
+}
+
+.close-player{
+    position:absolute;
+    top:15px;
+    right:15px;
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:50%;
+    background:rgba(0,0,0,0.7);
+    color:white;
+    font-size:1.1rem;
+    cursor:pointer;
+}
+
+.close-player:hover{
+    background:var(--red);
+}
+
 /* ===== LOGIN ===== */
 
 .overlay{
@@ -415,14 +489,6 @@ footer{
 
 /* ===== MOBILE ===== */
 
-@media(max-width:900px){
-
-    .contact-container{
-        grid-template-columns:1fr;
-    }
-
-}
-
 @media(max-width:768px){
 
     .movie-card{
@@ -455,231 +521,278 @@ footer{
 
 <!-- NAVBAR -->
 <nav id="navbar">
+
 <a href="#" class="logo">
 
-    <img
-    src="https://i.ibb.co/VcLBbLB0/3364-removebg-preview-1.png"
-    alt="TrippleNCJ Logo">
+<img
+src="https://i.ibb.co/VcLBbLB0/3364-removebg-preview-1.png"
+alt="TrippleNCJ Logo">
 
 </a>
-    
-    <div class="nav-right">
 
-        <span class="user-info" id="userDisplay"></span>
+<div class="nav-right">
 
-        <button class="auth-btn"
-        id="authBtn"
-        onclick="openLogin()">
+<span class="user-info" id="userDisplay"></span>
 
-            เข้าสู่ระบบ
+<button class="auth-btn"
+id="authBtn"
+onclick="openLogin()">
 
-        </button>
+เข้าสู่ระบบ
 
-    </div>
+</button>
+
+</div>
 
 </nav>
 
 <!-- HERO -->
 <section class="hero">
 
-    <div class="hero-content">
+<div class="hero-content">
 
-        <div class="hero-tag">
-            TRIPPLENCJ ORIGINAL
-        </div>
+<div class="hero-tag">
+TRIPPLENCJ ORIGINAL
+</div>
 
-        <h1>Breakpoint</h1>
+<h1>Breakpoint</h1>
 
-        <p>
-            ผลงานซีรีส์สืบสวนสุดเข้มข้นจาก TrippleNCJ Studio
-            เรื่องราวปริศนาที่คุณคาดไม่ถึง
-        </p>
+<p>
+ผลงานซีรีส์สืบสวนสุดเข้มข้นจาก TrippleNCJ Studio
+เรื่องราวปริศนาที่คุณคาดไม่ถึง
+</p>
 
-        <div class="hero-buttons">
+<div class="hero-buttons">
 
-            <button class="play-btn"
-            onclick="window.open('https://www.youtube.com/watch?v=uOlQF24CTXY')">
+<button class="play-btn"
+onclick="openPlayer(
+'https://www.youtube.com/embed/uOlQF24CTXY',
+'Breakpoint',
+'EP.1',
+'1 ชั่วโมง 24 นาที',
+'13+',
+'ซีรีส์สืบสวนลึกลับสุดเข้มข้น ที่เต็มไปด้วยปริศนาและความจริงที่ไม่มีใครคาดคิด',
+'Nikonpan, Nasa and Newtun'
+)">
 
-                ▶ เล่นวิดีโอ
+▶ เล่นวิดีโอ
 
-            </button>
+</button>
 
-            <button class="info-btn">
+<button class="info-btn">
 
-                ℹ รายละเอียดเพิ่มเติม
+ℹ รายละเอียดเพิ่มเติม
 
-            </button>
+</button>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
 </section>
 
 <!-- MOVIES -->
 <section class="section">
 
-    <h2 class="section-title">
-        🔥 กำลังมาแรง
-    </h2>
+<h2 class="section-title">
+🔥 กำลังมาแรง
+</h2>
 
-    <div class="movie-slider">
+<div class="movie-slider">
 
-        <div class="movie-card"
-        onclick="window.open('https://www.youtube.com/watch?v=uOlQF24CTXY')">
+<div class="movie-card"
+onclick="openPlayer(
+'https://www.youtube.com/embed/uOlQF24CTXY',
+'Breakpoint',
+'EP.1',
+'1 ชั่วโมง 24 นาที',
+'13+',
+'ซีรีส์สืบสวนลึกลับสุดเข้มข้น ที่เต็มไปด้วยปริศนาและความจริงที่ไม่มีใครคาดคิด',
+'Nikonpan, Nasa and Newtun'
+)">
 
-            <img
-            src="https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg"
-            alt="Breakpoint">
+<img
+src="https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg"
+alt="Breakpoint">
 
-            <div class="movie-info">
+<div class="movie-info">
 
-                <h3>Breakpoint</h3>
+<h3>Breakpoint</h3>
 
-                <p>
-                    ซีรีส์สืบสวนลึกลับสุดเข้มข้น
-                </p>
+<p>
+ซีรีส์สืบสวนลึกลับสุดเข้มข้น
+</p>
 
-            </div>
+</div>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
 </section>
 
 <!-- CONTACT -->
 <section class="contact-section">
 
-    <div class="contact-container">
+<div class="contact-container">
 
-        <div class="contact-left">
+<div class="contact-left">
 
-            <span class="contact-tag">
-                CONTACT US
-            </span>
+<span class="contact-tag">
+CONTACT US
+</span>
 
-            <h2>
-                ติดต่อ TrippleNCJ Studio
-            </h2>
+<h2>
+ติดต่อ TrippleNCJ Studio
+</h2>
 
-            <p>
-                หากมีคำถาม ข้อเสนอแนะ หรืออยากร่วมงานกับเรา
-                สามารถส่งข้อความมาได้ตลอดเวลา
-            </p>
+<p>
+หากมีคำถาม ข้อเสนอแนะ หรืออยากร่วมงานกับเรา
+สามารถส่งข้อความมาได้ตลอดเวลา
+</p>
 
-            <div class="contact-info">
+<div class="contact-info">
 
-                <div class="contact-item">
-                    📧 tripplencj@gmail.com
-                </div>
+<div class="contact-item">
+📧 tripplencj@gmail.com
+</div>
 
-                <div class="contact-item">
-                    🎬 YouTube: TrippleNCJ
-                </div>
+<div class="contact-item">
+🎬 YouTube: TrippleNCJ
+</div>
 
-                <div class="contact-item">
-                    🌏 Thailand
-                </div>
+<div class="contact-item">
+🌏 Thailand
+</div>
 
-            </div>
+</div>
 
-        </div>
+</div>
 
-        <div class="contact-right">
+<div class="contact-right">
 
-            <form id="contactForm">
+<form id="contactForm">
 
-                <input
-                type="text"
-                id="contactName"
-                placeholder="ชื่อของคุณ"
-                required>
+<input
+type="text"
+id="contactName"
+placeholder="ชื่อของคุณ"
+required>
 
-                <input
-                type="email"
-                id="contactEmail"
-                placeholder="อีเมล"
-                required>
+<input
+type="email"
+id="contactEmail"
+placeholder="อีเมล"
+required>
 
-                <textarea
-                rows="6"
-                id="contactMessage"
-                placeholder="ข้อความ..."
-                required></textarea>
+<textarea
+rows="6"
+id="contactMessage"
+placeholder="ข้อความ..."
+required></textarea>
 
-                <button type="submit">
+<button type="submit">
 
-                    ส่งข้อความ
+ส่งข้อความ
 
-                </button>
+</button>
 
-            </form>
+</form>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
 </section>
 
 <!-- LOGIN -->
 <div class="overlay" id="loginOverlay">
 
-    <div class="login-box">
+<div class="login-box">
 
-        <h2 id="formTitle">
-            เข้าสู่ระบบ
-        </h2>
+<h2 id="formTitle">
+เข้าสู่ระบบ
+</h2>
 
-        <input type="email"
-        id="email"
-        placeholder="อีเมล">
+<input type="email"
+id="email"
+placeholder="อีเมล">
 
-        <input type="password"
-        id="password"
-        placeholder="รหัสผ่าน">
+<input type="password"
+id="password"
+placeholder="รหัสผ่าน">
 
-        <button class="main-btn"
-        id="mainActionBtn"
-        onclick="handleAuth()">
+<button class="main-btn"
+id="mainActionBtn"
+onclick="handleAuth()">
 
-            เข้าสู่ระบบ
+เข้าสู่ระบบ
 
-        </button>
+</button>
 
-        <p style="margin-top:18px;color:#999;">
+<button class="close-btn"
+onclick="closeLogin()">
 
-            <span id="toggleText">
+ปิดหน้าต่าง
 
-                ยังไม่มีบัญชี?
+</button>
 
-                <a href="#"
-                onclick="toggleMode()"
-                style="color:white;text-decoration:none;">
+</div>
 
-                    สมัครสมาชิก
+</div>
 
-                </a>
+<!-- PLAYER -->
+<div class="player-overlay" id="playerOverlay">
 
-            </span>
+<div class="player-box">
 
-        </p>
+<button class="close-player"
+onclick="closePlayer()">
+✕
+</button>
 
-        <button class="close-btn"
-        onclick="closeLogin()">
+<iframe
+id="movieFrame"
+src=""
+allowfullscreen>
+</iframe>
 
-            ปิดหน้าต่าง
+<div class="player-info">
 
-        </button>
+<h2 id="movieTitle">Breakpoint</h2>
 
-    </div>
+<div class="movie-meta">
+
+<span id="movieEpisode">EP.1</span>
+<span id="movieLength">1 ชั่วโมง</span>
+<span id="movieRate">13+</span>
+
+</div>
+
+<p id="movieDescription">
+เรื่องย่อหนัง
+</p>
+
+<div class="movie-team">
+
+🎬 ทีมงาน:
+<span id="movieCredits">
+Nikonpan, Nasa and Newtun
+</span>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
 <!-- FOOTER -->
 <footer>
-    Alpha 1.2.0
-    © 2026 TrippleNCJ Studio — All Rights Reserved
+Alpha 1.2.0
+<br>
+© 2026 TrippleNCJ Studio — All Rights Reserved
 </footer>
 
 <script>
@@ -688,17 +801,17 @@ footer{
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyC57MsKiSr5ikqFPz_5f1KRkG2xZQ_5xb0",
+apiKey: "YOUR_API_KEY",
 
-    authDomain: "tripplencj-studio.firebaseapp.com",
+authDomain: "YOUR_PROJECT.firebaseapp.com",
 
-    projectId: "tripplencj-studio",
+projectId: "YOUR_PROJECT_ID",
 
-    storageBucket: "tripplencj-studio.firebasestorage.app",
+storageBucket: "YOUR_PROJECT.appspot.com",
 
-    messagingSenderId: "836765412638",
+messagingSenderId: "YOUR_SENDER_ID",
 
-    appId: "1:836765412638:web:9c16a920407dce36f0ed0f"
+appId: "YOUR_APP_ID"
 
 };
 
@@ -709,164 +822,92 @@ const db = firebase.firestore();
 
 /* ===== LOGIN ===== */
 
-let isLoginMode = true;
-
 function openLogin(){
 
-    document.getElementById('loginOverlay').style.display='flex';
+document.getElementById('loginOverlay').style.display='flex';
 
 }
 
 function closeLogin(){
 
-    document.getElementById('loginOverlay').style.display='none';
+document.getElementById('loginOverlay').style.display='none';
 
 }
 
-function toggleMode(){
+/* ===== PLAYER ===== */
 
-    isLoginMode = !isLoginMode;
+function openPlayer(
+video,
+title,
+episode,
+length,
+rate,
+description,
+credits
+){
 
-    document.getElementById('formTitle').innerText =
-    isLoginMode ? 'เข้าสู่ระบบ' : 'สมัครสมาชิก';
+document.getElementById('playerOverlay').style.display='flex';
 
-    document.getElementById('mainActionBtn').innerText =
-    isLoginMode ? 'เข้าสู่ระบบ' : 'สมัครสมาชิก';
+document.getElementById('movieFrame').src = video;
 
-    document.getElementById('toggleText').innerHTML =
-    isLoginMode
-    ?
-    `ยังไม่มีบัญชี?
-    <a href="#" onclick="toggleMode()" style="color:white;text-decoration:none;">
-    สมัครสมาชิก
-    </a>`
-    :
-    `มีบัญชีอยู่แล้ว?
-    <a href="#" onclick="toggleMode()" style="color:white;text-decoration:none;">
-    เข้าสู่ระบบ
-    </a>`;
+document.getElementById('movieTitle').innerText = title;
 
-}
+document.getElementById('movieEpisode').innerText = episode;
 
-/* ===== AUTH ===== */
+document.getElementById('movieLength').innerText = length;
 
-function handleAuth(){
+document.getElementById('movieRate').innerText = rate;
 
-    const email =
-    document.getElementById('email').value;
+document.getElementById('movieDescription').innerText = description;
 
-    const password =
-    document.getElementById('password').value;
-
-    if(!email || !password){
-
-        alert("กรุณากรอกข้อมูลให้ครบ");
-        return;
-
-    }
-
-    if(isLoginMode){
-
-        auth.signInWithEmailAndPassword(email,password)
-
-        .then(()=>{
-
-            closeLogin();
-
-        })
-
-        .catch(err=>{
-
-            alert(err.message);
-
-        });
-
-    }else{
-
-        auth.createUserWithEmailAndPassword(email,password)
-
-        .then(()=>{
-
-            closeLogin();
-
-        })
-
-        .catch(err=>{
-
-            alert(err.message);
-
-        });
-
-    }
+document.getElementById('movieCredits').innerText = credits;
 
 }
 
-/* ===== USER ===== */
+function closePlayer(){
 
-auth.onAuthStateChanged(user=>{
+document.getElementById('playerOverlay').style.display='none';
 
-    const btn =
-    document.getElementById('authBtn');
+document.getElementById('movieFrame').src = '';
 
-    const display =
-    document.getElementById('userDisplay');
-
-    if(user){
-
-        display.innerText = user.email;
-
-        btn.innerText = 'ออกจากระบบ';
-
-        btn.onclick = ()=>auth.signOut();
-
-    }else{
-
-        display.innerText = '';
-
-        btn.innerText = 'เข้าสู่ระบบ';
-
-        btn.onclick = openLogin;
-
-    }
-
-});
+}
 
 /* ===== CONTACT FORM ===== */
 
 document.getElementById('contactForm')
 .addEventListener('submit', async function(e){
 
-    e.preventDefault();
+e.preventDefault();
 
-    const name =
-    document.getElementById('contactName').value;
+const name =
+document.getElementById('contactName').value;
 
-    const email =
-    document.getElementById('contactEmail').value;
+const email =
+document.getElementById('contactEmail').value;
 
-    const message =
-    document.getElementById('contactMessage').value;
+const message =
+document.getElementById('contactMessage').value;
 
-    try{
+try{
 
-        await db.collection("messages").add({
+await db.collection("messages").add({
 
-            name:name,
-            email:email,
-            message:message,
-            createdAt:new Date()
+name:name,
+email:email,
+message:message,
+createdAt:new Date()
 
-        });
+});
 
-        alert("ส่งข้อความเรียบร้อยแล้ว 🎉");
+alert("ส่งข้อความเรียบร้อยแล้ว 🎉");
 
-        this.reset();
+this.reset();
 
-    }catch(err){
+}catch(err){
 
-        alert("เกิดข้อผิดพลาด: " + err.message);
+alert("เกิดข้อผิดพลาด: " + err.message);
 
-    }
+}
 
 });
 
@@ -874,18 +915,18 @@ document.getElementById('contactForm')
 
 window.addEventListener('scroll',()=>{
 
-    const nav =
-    document.getElementById('navbar');
+const nav =
+document.getElementById('navbar');
 
-    if(window.scrollY > 50){
+if(window.scrollY > 50){
 
-        nav.classList.add('scrolled');
+nav.classList.add('scrolled');
 
-    }else{
+}else{
 
-        nav.classList.remove('scrolled');
+nav.classList.remove('scrolled');
 
-    }
+}
 
 });
 
