@@ -10,11 +10,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        /* ===== 60-30-10 COLOR RULE ===== */
         :root {
-            --red: #e50914;
-            --black: #0f0f0f;
-            --card: #1b1b1b;
-            --gray: #b3b3b3;
+            --bg-60: #0b0b0b;       /* 60% สีพื้นหลังหลัก (ดาร์กสนิท ดูพรีเมียม) */
+            --card-30: #1f1f1f;     /* 30% สีรอง สำหรับการ์ด, ผนังเครื่องเล่น, และเมนู */
+            --accent-10: #e50914;   /* 10% สีไฮไลท์ สำหรับปุ่มที่ต้องการให้คนคลิก */
+            
+            /* สีสำหรับ Text */
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
             --transition: all 0.3s ease;
         }
 
@@ -22,8 +26,8 @@
 
         body {
             font-family: 'Kanit', sans-serif;
-            background: var(--black);
-            color: white;
+            background: var(--bg-60); /* ประยุกต์ใช้ 60% */
+            color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
         }
@@ -35,11 +39,15 @@
             padding: 0 5%;
             display: flex; align-items: center;
             z-index: 1000;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            background: linear-gradient(to bottom, rgba(11,11,11,0.9), transparent);
             transition: var(--transition);
         }
 
-        nav.scrolled { background: #000; height: 65px; border-bottom: 1px solid #222; }
+        nav.scrolled { 
+            background: var(--bg-60); 
+            height: 65px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+        }
         .logo img { height: 45px; }
 
         /* ===== HERO ===== */
@@ -48,25 +56,30 @@
             display: flex; align-items: center;
             padding: 0 5%;
             position: relative;
-            background: linear-gradient(to right, rgba(0,0,0,0.9) 20%, transparent 80%),
+            background: linear-gradient(to right, rgba(11,11,11,0.95) 20%, transparent 80%),
                         url('https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg') center/cover;
         }
 
         .hero-content { max-width: 650px; z-index: 2; }
-        .hero-tag { color: var(--red); font-weight: 600; letter-spacing: 2px; margin-bottom: 10px; }
+        .hero-tag { color: var(--accent-10); font-weight: 600; letter-spacing: 2px; margin-bottom: 10px; } /* ประยุกต์ใช้ 10% */
         .hero h1 { font-size: clamp(3rem, 8vw, 5rem); line-height: 1.1; margin-bottom: 20px; }
         
         .btn-play {
             padding: 12px 30px; border-radius: 5px; font-size: 1.1rem;
             cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
-            font-weight: 600; border: none; background: white; color: black;
+            font-weight: 600; border: none; 
+            background: var(--text-main); color: #000;
             transition: var(--transition);
         }
-        .btn-play:hover { background: var(--red); color: white; transform: scale(1.05); }
+        .btn-play:hover { 
+            background: var(--accent-10); /* ประยุกต์ใช้ 10% เมื่อ Hover */
+            color: var(--text-main); 
+            transform: scale(1.05); 
+        }
 
         /* ===== EPISODES GRID ===== */
         .section { padding: 60px 5%; }
-        .section-title { font-size: 1.8rem; margin-bottom: 30px; border-left: 4px solid var(--red); padding-left: 15px; }
+        .section-title { font-size: 1.8rem; margin-bottom: 30px; border-left: 4px solid var(--accent-10); padding-left: 15px; } /* ประยุกต์ใช้ 10% */
 
         .episode-grid {
             display: grid;
@@ -75,49 +88,57 @@
         }
 
         .ep-card {
-            background: var(--card);
+            background: var(--card-30); /* ประยุกต์ใช้ 30% */
             border-radius: 10px;
             overflow: hidden;
             cursor: pointer;
             transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.02);
         }
 
-        .ep-card:hover { transform: scale(1.03); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        .ep-card:hover { 
+            transform: scale(1.03); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-color: rgba(255,255,255,0.1);
+        }
         .ep-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
         .ep-info { padding: 15px; }
         .ep-info h3 { font-size: 1.1rem; margin-bottom: 5px; }
-        .ep-meta { font-size: 0.85rem; color: var(--gray); display: flex; gap: 10px; }
+        .ep-meta { font-size: 0.85rem; color: var(--text-muted); display: flex; gap: 10px; }
 
         /* ===== PLAYER MODAL ===== */
         .player-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.97);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             z-index: 2000; display: none; align-items: center; justify-content: center;
-            padding: 20px;
+            padding: 20px; backdrop-filter: blur(5px);
         }
 
         .player-box {
-            width: 100%; max-width: 1000px; background: #141414;
+            width: 100%; max-width: 1000px; 
+            background: var(--card-30); /* ประยุกต์ใช้ 30% ให้กล่องวิดีโอลอยเด่นขึ้นมาจากพื้นหลัง */
             border-radius: 12px; overflow: hidden; position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,1);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
 
         .close-btn {
             position: absolute; right: 20px; top: 20px; z-index: 10;
-            background: rgba(0,0,0,0.7); color: white; border: none;
+            background: rgba(0,0,0,0.6); color: var(--text-main); border: none;
             width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;
+            transition: var(--transition);
         }
+        .close-btn:hover { background: var(--accent-10); } /* ประยุกต์ใช้ 10% */
 
         .video-details { padding: 30px; }
-        .video-meta-row { display: flex; align-items: center; gap: 15px; margin: 10px 0 20px; color: #aaa; font-size: 0.95rem; }
-        .rate-badge { border: 1px solid #666; padding: 1px 6px; font-size: 0.8rem; border-radius: 3px; color: white; }
-        .credits-box { margin-top: 20px; padding-top: 20px; border-top: 1px solid #222; font-size: 0.9rem; color: #888; }
-        .credits-box span { color: #ddd; }
+        .video-meta-row { display: flex; align-items: center; gap: 15px; margin: 10px 0 20px; color: var(--text-muted); font-size: 0.95rem; }
+        .rate-badge { border: 1px solid #444; padding: 1px 6px; font-size: 0.8rem; border-radius: 3px; color: var(--text-main); }
+        .credits-box { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: var(--text-muted); }
+        .credits-box span { color: var(--text-main); }
 
         /* ===== FOOTER ===== */
-        footer { padding: 50px 5%; text-align: center; border-top: 1px solid #222; color: #555; }
+        footer { padding: 50px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: #444; background: #070707; }
         .social { margin-bottom: 15px; font-size: 1.5rem; display: flex; justify-content: center; gap: 20px; }
-        .social a { color: #555; transition: 0.3s; }
-        .social a:hover { color: var(--red); }
+        .social a { color: #444; transition: var(--transition); }
+        .social a:hover { color: var(--accent-10); } /* ประยุกต์ใช้ 10% */
 
         @media (max-width: 768px) { .hero { background-position: 75% center; } }
     </style>
@@ -134,7 +155,7 @@
         <div class="hero-content">
             <p class="hero-tag"><i class="fas fa-play-circle"></i> TRIPPLENCJ ORIGINAL</p>
             <h1>BREAKPOINT</h1>
-            <p style="margin-bottom: 25px; color: #ccc; font-size: 1.1rem;">
+            <p style="margin-bottom: 25px; color: var(--text-muted); font-size: 1.1rem;">
                 ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง <br>ร่วมค้นหาความจริงที่ถูกซ่อนไว้ภายใต้คำลวง
             </p>
             <button class="btn-play" onclick="playVideo(0)">
@@ -164,11 +185,11 @@
             <div class="video-details">
                 <h2 id="vTitle"></h2>
                 <div class="video-meta-row">
-                    <span id="vEp" style="color:var(--red); font-weight:600;"></span>
+                    <span id="vEp" style="color:var(--accent-10); font-weight:600;"></span>
                     <span id="vDur"></span>
                     <span class="rate-badge" id="vRate"></span>
                 </div>
-                <p id="vDesc" style="color: #ddd;"></p>
+                <p id="vDesc" style="color: var(--text-main);"></p>
                 <div class="credits-box">
                     🎬 ทีมงานสร้างสรรค์: <span id="vCredits"></span>
                 </div>
