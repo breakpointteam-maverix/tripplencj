@@ -338,20 +338,38 @@
     </div>
 
     <div class="don-card" id="qrCard" style="display:none; margin-top:1rem;">
-        <div class="qr-panel" id="qrPanel">
-            <div class="qr-pp-badge">
-                <i class="ti ti-credit-card" style="font-size:14px"></i>
-                PromptPay
-            </div>
-            <div class="qr-amount" id="qrAmt">0.00 บาท</div>
-<p class="qr-note">ตรวจสอบชื่อบัญชีปลายทางก่อนยืนยันการโอน</p>
+    <div class="qr-panel" id="qrPanel">
 
-<!-- วางตรงนี้ -->
-<div class="qr-note" style="margin-top:12px; padding:10px; background:var(--secondary-bg); border:1px solid var(--border); border-radius:8px; line-height:1.6;">
-    <i class="ti ti-wallet" style="color:#ff7a00;"></i>
-    หากต้องการชำระผ่าน <strong>TrueMoney Wallet</strong><br>
-    เบอร์: <strong>063-965-5474</strong><br>
-    ชื่อบัญชี: <strong>ปัญญวัธน์ สุขุมานันท์</strong>
+        <div class="qr-pp-badge">
+            <i class="ti ti-credit-card" style="font-size:14px"></i>
+            PromptPay
+        </div>
+
+        <div class="qr-box">
+            <img id="qrImg" src="" alt="PromptPay QR Code">
+        </div>
+
+        <div class="qr-amount" id="qrAmt">0.00 บาท</div>
+
+        <p class="qr-note">
+            ตรวจสอบชื่อบัญชีปลายทางก่อนยืนยันการโอน
+        </p>
+
+        <div class="qr-note" style="
+            margin-top:12px;
+            padding:10px;
+            background:var(--secondary-bg);
+            border:1px solid var(--border);
+            border-radius:8px;
+            line-height:1.6;
+        ">
+            <i class="ti ti-wallet" style="color:#ff7a00;"></i>
+            หากต้องการชำระผ่าน <strong>TrueMoney Wallet</strong><br>
+            เบอร์: <strong>063-965-5474</strong><br>
+            ชื่อบัญชี: <strong>ปัญญวัธน์ สุขุมานันท์</strong>
+        </div>
+
+    </div>
 </div>
 
     <button class="btn-confirm" id="submitBtn" disabled onclick="handleSubmit()">
