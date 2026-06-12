@@ -32,7 +32,7 @@
             overflow-x: hidden;
         }
 
-        /* ===== SPLASH SCREEN (แก้ไขบัคเลื่อนไม่ได้บนมือถือ) ===== */
+        /* ===== SPLASH SCREEN (เวอร์ชันตั้งเวลาปิดอัตโนมัติ 5 วินาที) ===== */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -42,28 +42,26 @@
             background-color: #0c0c0c;
             z-index: 99999;
             opacity: 1;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 0.8s ease-in-out; /* ความเร็วตอนที่หน้าจอค่อยๆ จางหาย */
             color: #ffffff;
             font-family: 'Kanit', sans-serif;
             text-align: center;
-            
-            /* แก้ไขจุดนี้: บังคับให้หน้านี้เลื่อนขึ้นลงได้เองในมือถือเมื่อเนื้อหาล้น */
-            overflow-y: scroll; 
-            -webkit-overflow-scrolling: touch; /* ช่วยให้เลื่อนบน iOS ลื่นขึ้น */
-            display: block; /* เปลี่ยนจาก flex เป็น block เพื่อให้ scroll ทำงานสมบูรณ์ */
+            overflow-y: auto; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .splash-content {
             width: 100%;
             max-width: 500px;
-            margin: 0 auto;
-            padding: 50px 20px; /* เว้นระยะบนล่างให้สกรอลล์ได้ไม่ติดขอบ */
+            padding: 20px;
         }
 
-        /* ปรับรูปพระฉายาลักษณ์องค์ภาให้เล็กลงในมือถือเพื่อไม่ให้ดันปุ่มตกจอ */
+        /* รูปพระฉายาลักษณ์องค์ภา */
         .royal-image {
             max-width: 80%; 
-            max-height: 280px; 
+            max-height: 320px; 
             width: auto;
             height: auto;
             margin: 0 auto 20px auto;
@@ -111,28 +109,6 @@
             font-size: clamp(0.9rem, 3.5vw, 1rem);
             color: #dfb76c;
             font-weight: 600;
-        }
-
-        /* ปุ่มเข้าสู่เว็บไซต์ */
-        .enter-btn {
-            margin-top: 30px;
-            background-color: transparent;
-            color: #dfb76c;
-            border: 1px solid #dfb76c;
-            padding: 12px 45px; 
-            font-size: 15px;
-            font-family: 'Kanit', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            -webkit-tap-highlight-color: transparent; 
-            display: inline-block;
-        }
-
-        .enter-btn:hover {
-            background-color: #dfb76c;
-            color: #0c0c0c;
         }
 
         /* ===== NAVBAR ===== */
@@ -258,8 +234,6 @@
             
             <p class="splash-subtext">ด้วยความสำนึกในพระกรุณาธิคุณอย่างหาที่สุดมิได้</p>
             <p class="splash-owner">TrippleNCJ Studio และคณะผู้สร้างสรรค์</p>
-            
-            <button class="enter-btn" onclick="closeSplash()">เข้าสู่เว็บไซต์</button>
         </div>
     </div>
     <nav id="navbar">
@@ -314,17 +288,20 @@
     </div>
 
     <script>
-        function closeSplash() {
-            const splash = document.getElementById('splash-screen');
-            splash.style.opacity = '0';
-            
-            // เมื่อกดเข้าเว็บแล้ว ปลดล็อกให้บอดี้หลักของเว็บสกรอลล์ได้ตามปกติ
-            document.body.style.overflow = 'auto'; 
-            
+        // แก้ไขส่วน JavaScript: เมื่อโหลดหน้าเว็บเสร็จ จะนับถอยหลัง 5 วินาทีแล้วทำการปิดตัวเองอัตโนมัติ
+        window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
-                splash.style.display = 'none';
-            }, 800); 
-        }
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0'; // ค่อยๆ จางหายไป (ใช้เวลาตามที่ตั้งใน CSS transition)
+                
+                // คืนค่าให้บอดี้หลักของเว็บไซต์ สามารถเลื่อนสกรอลล์ดูเนื้อหาได้ตามปกติ
+                document.body.style.overflow = 'auto'; 
+                
+                setTimeout(() => {
+                    splash.style.display = 'none'; // ซ่อน Element ออกไปจากหน้าจอถาวร
+                }, 800); 
+            }, 5000); // 5000 มิลลิวินาที = 5 วินาที (หากต้องการให้แสดงนานขึ้น สามารถปรับเปลี่ยนตัวเลขตรงนี้ได้ครับ)
+        });
 
         const episodes = [
             { 
