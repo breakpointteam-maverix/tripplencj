@@ -32,6 +32,98 @@
             overflow-x: hidden;
         }
 
+        /* ===== SPLASH SCREEN (ไว้อาลัย - เวอร์ชันคริสเตียน) ===== */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0c0c0c; /* สีพื้นหลังโทนเข้มและสงบนิ่ง */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999; /* อยู่เหนือทุกเมนูและ Navbar ในเว็บ */
+            opacity: 1;
+            transition: opacity 0.8s ease-in-out;
+            color: #ffffff;
+            font-family: 'Kanit', sans-serif;
+            text-align: center;
+        }
+
+        .splash-content {
+            max-width: 650px;
+            padding: 30px;
+        }
+
+        /* รูปพระฉายาลักษณ์องค์ภา */
+        .royal-image {
+            max-height: 380px;
+            width: auto;
+            margin-bottom: 25px;
+            border: 2px solid #dfb76c; /* กรอบสีทองนวลสุภาพ */
+            box-shadow: 0px 4px 20px rgba(0,0,0,0.6);
+        }
+
+        .splash-text {
+            font-size: 26px;
+            font-weight: 600;
+            color: #dfb76c;
+            margin-bottom: 10px;
+        }
+
+        .splash-subtext-main {
+            font-size: 16px;
+            color: #bbbbbb;
+            margin-bottom: 5px;
+        }
+
+        .splash-title {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.6;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .splash-space {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #dfb76c, transparent);
+            margin: 20px auto;
+            width: 60%;
+        }
+
+        .splash-subtext {
+            font-size: 15px;
+            color: #cccccc;
+            margin-bottom: 5px;
+        }
+
+        .splash-owner {
+            font-size: 16px;
+            color: #dfb76c;
+            font-weight: 600;
+        }
+
+        /* ปุ่มเข้าสู่เว็บไซต์ */
+        .enter-btn {
+            margin-top: 35px;
+            background-color: transparent;
+            color: #dfb76c;
+            border: 1px solid #dfb76c;
+            padding: 10px 35px;
+            font-size: 15px;
+            font-family: 'Kanit', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .enter-btn:hover {
+            background-color: #dfb76c;
+            color: #0c0c0c;
+        }
+
         /* ===== NAVBAR ===== */
         nav {
             position: fixed;
@@ -145,6 +237,22 @@
 </head>
 <body>
 
+    <div id="splash-screen">
+        <div class="splash-content">
+            <img src="Pa.png" alt="น้อมรำลึกในพระกรุณาธิคุณ" class="royal-image">
+            
+            <h1 class="splash-text">น้อมรำลึกในพระกรุณาธิคุณ</h1>
+            <p class="splash-subtext-main">เนื่องในการสิ้นพระชนม์ของ</p>
+            <p class="splash-title">สมเด็จพระเจ้าลูกเธอ เจ้าฟ้าพัชรกิติยาภา นเรนทิราเทพยวดี<br>กรมหลวงราชสาริณีสิริพัชร มหาวัชรราชธิดา</p>
+            
+            <div class="splash-space"></div>
+            
+            <p class="splash-subtext">ด้วยความสำนึกในพระกรุณาธิคุณอย่างหาที่สุดมิได้</p>
+            <p class="splash-owner">TrippleNCJ Studio และคณะผู้สร้างสรรค์</p>
+            
+            <button class="enter-btn" onclick="closeSplash()">เข้าสู่เว็บไซต์</button>
+        </div>
+    </div>
     <nav id="navbar">
         <a href="#" class="logo">
             <img src="https://i.ibb.co/VcLBbLB0/3364-removebg-preview-1.png" alt="Logo">
@@ -177,7 +285,6 @@
         <p>© 2026 TRIPPLENCJ STUDIO. All Rights Reserved.</p>
     </footer>
 
-    <!-- PLAYER MODAL -->
     <div class="player-overlay" id="playerOverlay">
         <div class="player-box">
             <button class="close-btn" onclick="closePlayer()">✕</button>
@@ -198,6 +305,15 @@
     </div>
 
     <script>
+        // ฟังก์ชันสั่งให้ Splash Screen ค่อยๆ จางลง และซ่อนไปเมื่อกดปุ่มเข้าสู่เว็บไซต์
+        function closeSplash() {
+            const splash = document.getElementById('splash-screen');
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 800); // 800 มิลลิวินาที สัมพันธ์กับ CSS transition
+        }
+
         const episodes = [
             { 
                 id: "uOlQF24CTXY", ep: "EP.1", title: "จุดเริ่มต้น", 
