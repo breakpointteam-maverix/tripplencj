@@ -3,384 +3,463 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrippleNCJ Studio | Breakpoint</title>
-
+    <title>ระบบโดเนทสนับสนุน</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
-        /* ===== 60-30-10 COLOR RULE ===== */
-        :root {
-            --bg-60: #0b0b0b;       
-            --card-30: #1f1f1f;     
-            --accent-10: #e50914;   
-            
-            /* สีสำหรับ Text */
-            --text-main: #ffffff;
-            --text-muted: #a0a0a0;
-            --transition: all 0.3s ease;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #f5f4f0;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a18;
+            --text-secondary: #5a5a56;
+            --text-tertiary: #9a9a94;
+            --border: rgba(0,0,0,0.12);
+            --border-hover: rgba(0,0,0,0.28);
+            --input-bg: #fafaf8;
+            --secondary-bg: #f1f0ec;
+            --green: #1D9E75;
+            --green-dark: #0F6E56;
+            --green-light: #E1F5EE;
+            --green-text: #0F6E56;
+        }
 
         body {
-            font-family: 'Kanit', sans-serif;
-            background: var(--bg-60); 
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* ===== SPLASH SCREEN (เวอร์ชันตั้งเวลาปิดอัตโนมัติ 5 วินาที) ===== */
-        #splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0c0c0c;
-            z-index: 99999;
-            opacity: 1;
-            transition: opacity 0.8s ease-in-out; /* ความเร็วตอนที่หน้าจอค่อยๆ จางหาย */
-            color: #ffffff;
-            font-family: 'Kanit', sans-serif;
-            text-align: center;
-            overflow-y: auto; 
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            padding: 40px 20px 60px;
         }
 
-        .splash-content {
+        .don-wrap {
             width: 100%;
-            max-width: 500px;
-            padding: 20px;
+            max-width: 460px;
         }
 
-        /* รูปพระฉายาลักษณ์องค์ภา */
-        .royal-image {
-            max-width: 80%; 
-            max-height: 320px; 
-            width: auto;
-            height: auto;
-            margin: 0 auto 20px auto;
+        /* Header */
+        .don-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .don-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            margin-bottom: 0.75rem;
+            font-size: 22px;
+            color: var(--text-secondary);
+        }
+        .don-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .don-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Step bar */
+        .step-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.75rem;
+        }
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            gap: 6px;
+        }
+        .step-num {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 500;
+            border: 1.5px solid var(--border-hover);
+            color: var(--text-tertiary);
+            background: var(--card-bg);
+            transition: all 0.3s;
+            position: relative; z-index: 1;
+        }
+        .step-num.active { border-color: var(--green); color: var(--green); }
+        .step-num.done { background: var(--green); border-color: var(--green); color: white; }
+        .step-label { font-size: 11px; color: var(--text-tertiary); }
+        .step-label.active { color: var(--green); font-weight: 500; }
+        .step-connector { flex: 1; height: 1px; background: var(--border); margin-bottom: 18px; }
+
+        /* Cards */
+        .don-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .don-card-title {
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--text-tertiary);
+            margin-bottom: 0.875rem;
+        }
+
+        /* Fields */
+        .field-group { margin-bottom: 0.875rem; }
+        .field-group:last-child { margin-bottom: 0; }
+        .field-label {
             display: block;
-            border: 2px solid #dfb76c;
-            box-shadow: 0px 4px 20px rgba(0,0,0,0.6);
-            object-fit: contain;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
         }
-
-        .splash-text {
-            font-size: clamp(1.2rem, 4.5vw, 1.5rem); 
-            font-weight: 600;
-            color: #dfb76c;
-            margin-bottom: 8px;
+        .field-group input[type="text"],
+        .field-group input[type="number"],
+        .field-group textarea {
+            width: 100%;
+            padding: 9px 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
         }
-
-        .splash-subtext-main {
-            font-size: clamp(0.85rem, 3.5vw, 0.95rem);
-            color: #bbbbbb;
-            margin-bottom: 5px;
+        .field-group input:focus,
+        .field-group textarea:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(29,158,117,0.12);
         }
+        .field-group textarea { resize: vertical; min-height: 76px; }
 
-        .splash-title {
-            font-size: clamp(0.95rem, 4vw, 1.1rem);
-            font-weight: 600;
-            line-height: 1.5;
-            color: #ffffff;
-            margin-bottom: 15px;
-        }
-
-        .splash-space {
-            height: 1px;
-            background: linear-gradient(to right, transparent, #dfb76c, transparent);
-            margin: 15px auto;
-            width: 60%;
-        }
-
-        .splash-subtext {
-            font-size: clamp(0.8rem, 3vw, 0.9rem);
-            color: #cccccc;
-            margin-bottom: 5px;
-        }
-
-        .splash-owner {
-            font-size: clamp(0.9rem, 3.5vw, 1rem);
-            color: #dfb76c;
-            font-weight: 600;
-        }
-
-        /* ===== NAVBAR ===== */
-        nav {
-            position: fixed;
-            top: 0; width: 100%; height: 75px;
-            padding: 0 5%;
-            display: flex; align-items: center;
-            z-index: 1000;
-            background: linear-gradient(to bottom, rgba(11,11,11,0.9), transparent);
-            transition: var(--transition);
-        }
-
-        nav.scrolled { 
-            background: var(--bg-60); 
-            height: 65px; 
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
-        }
-        .logo img { height: 45px; }
-
-        /* ===== HERO ===== */
-        .hero {
-            height: 100vh;
-            display: flex; align-items: center;
-            padding: 0 5%;
-            position: relative;
-            background: linear-gradient(to right, rgba(11,11,11,0.95) 20%, transparent 80%),
-                        url('https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg') center/cover;
-        }
-
-        .hero-content { max-width: 650px; z-index: 2; }
-        .hero-tag { color: var(--accent-10); font-weight: 600; letter-spacing: 2px; margin-bottom: 10px; }
-        .hero h1 { font-size: clamp(3rem, 8vw, 5rem); line-height: 1.1; margin-bottom: 20px; }
-        
-        .btn-play {
-            padding: 12px 30px; border-radius: 5px; font-size: 1.1rem;
-            cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
-            font-weight: 600; border: none; 
-            background: var(--text-main); color: #000;
-            transition: var(--transition);
-        }
-        .btn-play:hover { 
-            background: var(--accent-10); 
-            color: var(--text-main); 
-            transform: scale(1.05); 
-        }
-
-        /* ===== EPISODES GRID ===== */
-        .section { padding: 60px 5%; }
-        .section-title { font-size: 1.8rem; margin-bottom: 30px; border-left: 4px solid var(--accent-10); padding-left: 15px; }
-
-        .episode-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .ep-card {
-            background: var(--card-30); 
-            border-radius: 10px;
-            overflow: hidden;
+        /* Presets */
+        .presets { display: flex; gap: 8px; margin-top: 10px; }
+        .preset {
+            flex: 1;
+            padding: 7px 4px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 500;
+            font-family: 'IBM Plex Mono', monospace;
             cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid rgba(255,255,255,0.02);
+            text-align: center;
+            transition: all 0.15s;
+        }
+        .preset:hover { border-color: var(--green); color: var(--green); }
+        .preset.on { background: var(--green-light); border-color: var(--green); color: var(--green-text); }
+
+        /* QR section */
+        .qr-panel { text-align: center; padding: 0.5rem 0; }
+        .qr-pp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .qr-box {
+            display: inline-block;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .qr-box img { width: 180px; height: 180px; display: block; }
+        .qr-amount {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--green-dark);
+            margin: 4px 0 4px;
+        }
+        .qr-note { font-size: 11px; color: var(--text-tertiary); }
+
+        /* Buttons */
+        .btn-gen {
+            width: 100%;
+            padding: 11px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-hover);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-gen:hover { border-color: var(--green); color: var(--green); }
+
+        .btn-confirm {
+            width: 100%;
+            padding: 13px;
+            background: var(--green);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            margin-top: 1rem;
+        }
+        .btn-confirm:hover { background: var(--green-dark); }
+        .btn-confirm:disabled {
+            background: var(--secondary-bg);
+            color: var(--text-tertiary);
+            cursor: not-allowed;
         }
 
-        .ep-card:hover { 
-            transform: scale(1.03); 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            border-color: rgba(255,255,255,0.1);
+        /* Success */
+        .success-msg { text-align: center; padding: 1.5rem 1rem; }
+        .success-icon {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: var(--green-light);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 24px;
+            color: var(--green-dark);
         }
-        .ep-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
-        .ep-info { padding: 15px; }
-        .ep-info h3 { font-size: 1.1rem; margin-bottom: 5px; }
-        .ep-meta { font-size: 0.85rem; color: var(--text-muted); display: flex; gap: 10px; }
-
-        /* ===== PLAYER MODAL ===== */
-        .player-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            z-index: 2000; display: none; align-items: center; justify-content: center;
-            padding: 20px; backdrop-filter: blur(5px);
+        .success-title {
+            font-size: 18px; font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
         }
+        .success-sub { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
 
-        .player-box {
-            width: 100%; max-width: 1000px; 
-            background: var(--card-30); 
-            border-radius: 12px; overflow: hidden; position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        /* Loading spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: 10px;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
         }
-
-        .close-btn {
-            position: absolute; right: 20px; top: 20px; z-index: 10;
-            background: rgba(0,0,0,0.6); color: var(--text-main); border: none;
-            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;
-            transition: var(--transition);
+        .loading.show { display: flex; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner {
+            width: 16px; height: 16px;
+            border: 2px solid var(--border);
+            border-top-color: var(--green);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
         }
-        .close-btn:hover { background: var(--accent-10); }
-
-        .video-details { padding: 30px; }
-        .video-meta-row { display: flex; align-items: center; gap: 15px; margin: 10px 0 20px; color: var(--text-muted); font-size: 0.95rem; }
-        .rate-badge { border: 1px solid #444; padding: 1px 6px; font-size: 0.8rem; border-radius: 3px; color: var(--text-main); }
-        .credits-box { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: var(--text-muted); }
-        .credits-box span { color: var(--text-main); }
-
-        /* ===== FOOTER ===== */
-        footer { padding: 50px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: #444; background: #070707; }
-        .social { margin-bottom: 15px; font-size: 1.5rem; display: flex; justify-content: center; gap: 20px; }
-        .social a { color: #444; transition: var(--transition); }
-        .social a:hover { color: var(--accent-10); }
-
-        @media (max-width: 768px) { .hero { background-position: 75% center; } }
     </style>
 </head>
-<body style="overflow: hidden;"> <div id="splash-screen">
-        <div class="splash-content">
-            <img src="Pa.png" alt="น้อมรำลึกในพระกรุณาธิคุณ" class="royal-image">
-            
-            <h1 class="splash-text">น้อมรำลึกในพระกรุณาธิคุณ</h1>
-            <p class="splash-subtext-main">เนื่องในการสิ้นพระชนม์ของ</p>
-            <p class="splash-title">สมเด็จพระเจ้าลูกเธอ เจ้าฟ้าพัชรกิติยาภา นเรนทิราเทพยวดี<br>กรมหลวงราชสาริณีสิริพัชร มหาวัชรราชธิดา</p>
-            
-            <div class="splash-space"></div>
-            
-            <p class="splash-subtext">ด้วยความสำนึกในพระกรุณาธิคุณอย่างหาที่สุดมิได้</p>
-            <p class="splash-owner">TrippleNCJ Studio และคณะผู้สร้างสรรค์</p>
+<body>
+
+<div class="don-wrap">
+    <div class="don-header">
+        <div class="don-icon"><i class="ti ti-coffee"></i></div>
+        <p class="don-title">สนับสนุนค่าชาไทย TrippleNCJ</p>
+<p class="don-sub">Buy us a Thai-tea</p>
+        <p class="don-sub">โดเนทผ่าน PromptPay และ TrueMoney Wallet รองรับทุกธนาคาร</p>
+    </div>
+
+    <div class="step-bar" id="stepBar">
+        <div class="step-item">
+            <div class="step-num active" id="s1">1</div>
+            <div class="step-label active" id="sl1">กรอกข้อมูล</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-item">
+            <div class="step-num" id="s2">2</div>
+            <div class="step-label" id="sl2">สแกน QR</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-item">
+            <div class="step-num" id="s3">3</div>
+            <div class="step-label" id="sl3">ยืนยัน</div>
         </div>
     </div>
-    <nav id="navbar">
-        <a href="#" class="logo">
-            <img src="https://i.ibb.co/VcLBbLB0/3364-removebg-preview-1.png" alt="Logo">
-        </a>
-    </nav>
 
-    <header class="hero">
-        <div class="hero-content">
-            <p class="hero-tag"><i class="fas fa-play-circle"></i> TRIPPLENCJ ORIGINAL</p>
-            <h1>BREAKPOINT</h1>
-            <p style="margin-bottom: 25px; color: var(--text-muted); font-size: 1.1rem;">
-                ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง <br>ร่วมค้นหาความจริงที่ถูกซ่อนไว้ภายใต้คำลวง
-            </p>
-            <button class="btn-play" onclick="playVideo(0)">
-                <i class="fas fa-play"></i> รับชมตอนล่าสุด
-            </button>
-        </div>
-    </header>
-
-    <main class="section">
-        <h2 class="section-title">Breakpoint: ทุกตอน</h2>
-        <div class="episode-grid" id="episodeList"></div>
-    </main>
-
-    <footer>
-        <div class="social">
-            <a href="https://youtube.com/@TrippleNCJ" target="_blank"><i class="fab fa-youtube"></i></a>
-            <a href="mailto:tripplencj@gmail.com"><i class="fas fa-envelope"></i></a>
-        </div>
-        <p>© 2026 TRIPPLENCJ STUDIO. All Rights Reserved.</p>
-    </footer>
-
-    <div class="player-overlay" id="playerOverlay">
-        <div class="player-box">
-            <button class="close-btn" onclick="closePlayer()">✕</button>
-            <div id="videoFrame"></div>
-            <div class="video-details">
-                <h2 id="vTitle"></h2>
-                <div class="video-meta-row">
-                    <span id="vEp" style="color:var(--accent-10); font-weight:600;"></span>
-                    <span id="vDur"></span>
-                    <span class="rate-badge" id="vRate"></span>
-                </div>
-                <p id="vDesc" style="color: var(--text-main);"></p>
-                <div class="credits-box">
-                    🎬 ทีมงานสร้างสรรค์: <span id="vCredits"></span>
-                </div>
+    <div id="mainForm">
+        <div class="don-card">
+            <p class="don-card-title">ข้อมูลผู้โดเนท</p>
+            <div class="field-group">
+                <label class="field-label" for="dn-name">ชื่อ / นามแฝง</label>
+                <input type="text" id="dn-name" placeholder="ระบุชื่อของคุณ">
+            </div>
+            <div class="field-group">
+                <label class="field-label" for="dn-msg">ข้อความฝากถึงเรา</label>
+                <textarea id="dn-msg" placeholder="ข้อความให้กำลังใจ..."></textarea>
             </div>
         </div>
+
+        <div class="don-card">
+            <p class="don-card-title">จำนวนเงิน (บาท)</p>
+            <div class="field-group">
+                <input type="number" id="dn-amt" min="1" value="20" placeholder="ระบุจำนวนเงิน">
+            </div>
+            <div class="presets">
+                <button type="button" class="preset on" onclick="setAmt(20,this)">฿20</button>
+                <button type="button" class="preset" onclick="setAmt(50,this)">฿50</button>
+                <button type="button" class="preset" onclick="setAmt(100,this)">฿100</button>
+                <button type="button" class="preset" onclick="setAmt(500,this)">฿500</button>
+            </div>
+        </div>
+
+        <button type="button" class="btn-gen" onclick="showQR()">
+            <i class="ti ti-qrcode"></i>
+            สร้าง QR Code พร้อมเพย์
+        </button>
     </div>
 
-    <script>
-        // แก้ไขส่วน JavaScript: เมื่อโหลดหน้าเว็บเสร็จ จะนับถอยหลัง 5 วินาทีแล้วทำการปิดตัวเองอัตโนมัติ
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                splash.style.opacity = '0'; // ค่อยๆ จางหายไป (ใช้เวลาตามที่ตั้งใน CSS transition)
-                
-                // คืนค่าให้บอดี้หลักของเว็บไซต์ สามารถเลื่อนสกรอลล์ดูเนื้อหาได้ตามปกติ
-                document.body.style.overflow = 'auto'; 
-                
-                setTimeout(() => {
-                    splash.style.display = 'none'; // ซ่อน Element ออกไปจากหน้าจอถาวร
-                }, 800); 
-            }, 5000); // 5000 มิลลิวินาที = 5 วินาที (หากต้องการให้แสดงนานขึ้น สามารถปรับเปลี่ยนตัวเลขตรงนี้ได้ครับ)
+    <div class="don-card" id="qrCard" style="display:none; margin-top:1rem;">
+    <div class="qr-panel" id="qrPanel">
+
+        <div class="qr-pp-badge">
+            <i class="ti ti-credit-card" style="font-size:14px"></i>
+            PromptPay
+        </div>
+
+        <div class="qr-box">
+            <img id="qrImg" src="" alt="PromptPay QR Code">
+        </div>
+
+        <div class="qr-amount" id="qrAmt">0.00 บาท</div>
+
+        <p class="qr-note">
+            ตรวจสอบชื่อบัญชีปลายทางก่อนยืนยันการโอน
+        </p>
+
+        <div class="qr-note" style="
+            margin-top:12px;
+            padding:10px;
+            background:var(--secondary-bg);
+            border:1px solid var(--border);
+            border-radius:8px;
+            line-height:1.6;
+        ">
+            <i class="ti ti-wallet" style="color:#ff7a00;"></i>
+            หากต้องการชำระผ่าน <strong>TrueMoney Wallet</strong><br>
+            เบอร์: <strong>063-965-5474</strong><br>
+            ชื่อบัญชี: <strong>ปัญญวัธน์ สุขุมานันท์</strong>
+        </div>
+
+    </div>
+</div>
+
+    <button class="btn-confirm" id="submitBtn" disabled onclick="handleSubmit()">
+        <i class="ti ti-check"></i>
+        ยืนยันการโดเนท
+    </button>
+
+    <div class="loading" id="loadingEl">
+        <div class="spinner"></div>
+        กำลังบันทึกข้อมูล...
+    </div>
+
+    <div class="don-card success-msg" id="successMsg" style="display:none; margin-top:1rem;">
+        <div class="success-icon"><i class="ti ti-heart"></i></div>
+        <p class="success-title">ขอบคุณมากครับ!</p>
+        <p class="success-sub">ข้อมูลโดเนทถูกบันทึกเรียบร้อยแล้ว<br>ทีมงานขอส่งกำลังใจตอบกลับทุกท่านเสมอ 🙏</p>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // ตั้งค่าตรงนี้
+    // ============================================================
+    const PP_ID = "0639655474";           // เบอร์ PromptPay / เลขบัตรประชาชน
+    const WEB_APP_URL = "YOUR_WEB_APP_URL_HERE"; // URL ของ Google Apps Script
+    // ============================================================
+
+    function setAmt(v, btn) {
+        document.getElementById('dn-amt').value = v;
+        document.querySelectorAll('.preset').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        if (document.getElementById('qrCard').style.display === 'block') showQR();
+    }
+
+    document.getElementById('dn-amt').addEventListener('input', function () {
+        document.querySelectorAll('.preset').forEach(b => b.classList.remove('on'));
+    });
+
+    function setStep(n) {
+        [1, 2, 3].forEach(i => {
+            const sn = document.getElementById('s' + i);
+            const sl = document.getElementById('sl' + i);
+            sn.className = 'step-num' + (i < n ? ' done' : i === n ? ' active' : '');
+            sl.className = 'step-label' + (i === n ? ' active' : '');
+            if (i < n) sn.innerHTML = '<i class="ti ti-check" style="font-size:13px"></i>';
+            else sn.textContent = i;
         });
+    }
 
-        const episodes = [
-            { 
-                id: "uOlQF24CTXY", ep: "EP.1", title: "จุดเริ่มต้น", 
-                dur: "2 นาที 49 วินาที", rate: "13+", 
-                desc: "ซีรีส์สืบสวนลึกลับสุดเข้มข้นที่เต็มไปด้วยปริศนาและความจริงที่ไม่มีใครคาดคิด",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            { 
-                id: "WrFwGxEqB3M", ep: "EP.2", title: "ความจริงเริ่มเผย", 
-                dur: "2 นาที 48 วินาที", rate: "13+", 
-                desc: "เมื่อทวีสันต์เริ่มเปิดโรงงาน และรับสมัครงาน ท่ามกลางสายตาที่จับจ้อง",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            { 
-                id: "wXiwxUFf1aU", ep: "EP.3", title: "อดีตที่ถูกซ่อน", 
-                dur: "3 นาที 22 วินาที", rate: "13+", 
-                desc: "ทวีสันต์โดนภัทรนนท์หักหลัง ความเชื่อใจที่เคยมีเริ่มพังทลาย",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            { 
-                id: "jd4Ia9OtpNs", ep: "EP.3.5", title: "ตอนพิเศษ", 
-                dur: "2 นาที 30 วินาที", rate: "13+", 
-                desc: "เบื้องหลังและมุมมองอีกด้านที่ความจริงอาจไม่ได้มีเพียงด้านเดียว",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            { 
-                id: "ZUU6_Heef8s", ep: "EP.4", title: "จุดแตกหัก", 
-                dur: "2 นาที 50 วินาที", rate: "13+", 
-                desc: "ทุกคนเริ่มไม่ไว้ใจกัน บรรยากาศแห่งความหวาดระแวงเข้าปกคลุม",
-                credits: "Nikonpan, Nasa and Newtun"
-            }
-        ];
+    function showQR() {
+        const amt = parseFloat(document.getElementById('dn-amt').value);
+        if (!amt || amt <= 0) { alert('กรุณาระบุจำนวนเงินที่ถูกต้อง'); return; }
 
-        const container = document.getElementById('episodeList');
-        episodes.forEach((item, index) => {
-            container.innerHTML += `
-                <div class="ep-card" onclick="playVideo(${index})">
-                    <img src="https://img.youtube.com/vi/${item.id}/maxresdefault.jpg" alt="${item.ep}">
-                    <div class="ep-info">
-                        <h3>${item.ep}: ${item.title}</h3>
-                        <div class="ep-meta">
-                            <span><i class="far fa-clock"></i> ${item.dur}</span>
-                            <span>${item.rate}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
+        document.getElementById('qrImg').src = `https://promptpay.io/${PP_ID}/${amt}.png`;
+        document.getElementById('qrAmt').textContent = amt.toFixed(2) + ' บาท';
 
-        function playVideo(index) {
-            const data = episodes[index];
-            const overlay = document.getElementById('playerOverlay');
-            document.getElementById('videoFrame').innerHTML = `
-                <iframe width="100%" height="auto" style="aspect-ratio:16/9; border:none;" 
-                src="https://www.youtube.com/embed/${data.id}?autoplay=1" 
-                allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            `;
-            document.getElementById('vTitle').innerText = `Breakpoint: ${data.title}`;
-            document.getElementById('vEp').innerText = data.ep;
-            document.getElementById('vDur').innerText = data.dur;
-            document.getElementById('vRate').innerText = data.rate;
-            document.getElementById('vDesc').innerText = data.desc;
-            document.getElementById('vCredits').innerText = data.credits;
-            
-            overlay.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
+        const qrCard = document.getElementById('qrCard');
+        qrCard.style.display = 'block';
+        document.getElementById('submitBtn').disabled = false;
 
-        function closePlayer() {
-            document.getElementById('playerOverlay').style.display = 'none';
-            document.getElementById('videoFrame').innerHTML = '';
-            document.body.style.overflow = 'auto';
-        }
+        setStep(2);
+        qrCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            window.scrollY > 50 ? nav.classList.add('scrolled') : nav.classList.remove('scrolled');
-        });
-    </script>
+    function handleSubmit() {
+        const name = document.getElementById('dn-name').value.trim();
+        const msg  = document.getElementById('dn-msg').value.trim();
+        const amt  = document.getElementById('dn-amt').value;
+
+        if (!name) { alert('กรุณาระบุชื่อผู้โดเนท'); return; }
+
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('loadingEl').classList.add('show');
+        setStep(3);
+
+        const params = new URLSearchParams({ name, message: msg, amount: amt });
+
+        fetch(WEB_APP_URL, { method: 'POST', body: params })
+            .catch(() => {})
+            .finally(() => {
+                document.getElementById('loadingEl').classList.remove('show');
+                document.getElementById('mainForm').style.display = 'none';
+                document.getElementById('qrCard').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'none';
+                const sm = document.getElementById('successMsg');
+                sm.style.display = 'block';
+                sm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+    }
+</script>
+
 </body>
 </html>
