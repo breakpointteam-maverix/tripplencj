@@ -207,22 +207,22 @@
         /* ===== PLAYER MODAL ===== */
         .player-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            z-index: 2000; display: none; align-items: center; justify-content: center;
-            padding: 20px; backdrop-filter: blur(5px);
+            z-index: 2000; display: none; align-items: flex-start; justify-content: center;
+            padding: 20px; overflow-y: auto; backdrop-filter: blur(5px);
         }
 
         .player-box {
-            width: 100%; max-width: 1000px; 
+            width: 100%; max-width: 1000px; max-height: calc(100vh - 40px);
             background: var(--card-30); /* ประยุกต์ใช้ 30% ให้กล่องวิดีโอลอยเด่นขึ้นมาจากพื้นหลัง */
-            border-radius: 12px; overflow: hidden; position: relative;
+            border-radius: 12px; overflow: auto; position: relative; margin: 20px auto;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
 
         .close-btn {
-            position: absolute; right: 20px; top: 20px; z-index: 10;
-            background: rgba(0,0,0,0.6); color: var(--text-main); border: none;
-            width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;
-            transition: var(--transition);
+            position: fixed; right: 18px; top: 18px; z-index: 2100;
+            background: rgba(0,0,0,0.85); color: var(--text-main); border: none;
+            width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;
+            transition: var(--transition); box-shadow: 0 6px 18px rgba(0,0,0,0.35);
         }
         .close-btn:hover { background: var(--accent-10); } /* ประยุกต์ใช้ 10% */
 
@@ -353,35 +353,88 @@
             }, 800); // 800 มิลลิวินาที สัมพันธ์กับ CSS transition
         }
 
+        const driveBase = "https://drive.google.com/file/d/";
+
         const episodes = [
-            { 
-                id: "uOlQF24CTXY", ep: "EP.1", title: "จุดเริ่มต้น", 
-                dur: "2 นาที 49 วินาที", rate: "13+", 
+            {
+                id: "uOlQF24CTXY", ep: "EP.1", title: "จุดเริ่มต้น",
+                dur: "2 นาที 49 วินาที", rate: "13+",
+                driveId: "1M1cL2hv8oIWLR1ZdHWTXgIsMI4NYX4kY",
+                videoUrl: driveBase + "1M1cL2hv8oIWLR1ZdHWTXgIsMI4NYX4kY/preview?usp=sharing",
+                poster: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
                 desc: "ซีรีส์สืบสวนลึกลับสุดเข้มข้นที่เต็มไปด้วยปริศนาและความจริงที่ไม่มีใครคาดคิด",
                 credits: "Nikonpan, Nasa and Newtun"
             },
-            { 
-                id: "WrFwGxEqB3M", ep: "EP.2", title: "ความจริงเริ่มเผย", 
-                dur: "2 นาที 48 วินาที", rate: "13+", 
+            {
+                id: "WrFwGxEqB3M", ep: "EP.2", title: "ความจริงเริ่มเผย",
+                dur: "2 นาที 48 วินาที", rate: "13+",
+                driveId: "1tXGhOxXgfQvgZ-jDB-eBHi5exSBEk1Bc",
+                videoUrl: driveBase + "1tXGhOxXgfQvgZ-jDB-eBHi5exSBEk1Bc/preview?usp=sharing",
+                poster: "https://img.youtube.com/vi/WrFwGxEqB3M/maxresdefault.jpg",
                 desc: "เมื่อทวีสันต์เริ่มเปิดโรงงาน และรับสมัครงาน ท่ามกลางสายตาที่จับจ้อง",
                 credits: "Nikonpan, Nasa and Newtun"
             },
-            { 
-                id: "wXiwxUFf1aU", ep: "EP.3", title: "อดีตที่ถูกซ่อน", 
-                dur: "3 นาที 22 วินาที", rate: "13+", 
+            {
+                id: "wXiwxUFf1aU", ep: "EP.3", title: "อดีตที่ถูกซ่อน",
+                dur: "3 นาที 22 วินาที", rate: "13+",
+                driveId: "1QSghpbLTKyA4dYDtRCRPGU9bW7Df0mbT",
+                videoUrl: driveBase + "1QSghpbLTKyA4dYDtRCRPGU9bW7Df0mbT/preview?usp=sharing",
+                poster: "https://img.youtube.com/vi/wXiwxUFf1aU/maxresdefault.jpg",
                 desc: "ทวีสันต์โดนภัทรนนท์หักหลัง ความเชื่อใจที่เคยมีเริ่มพังทลาย",
                 credits: "Nikonpan, Nasa and Newtun"
             },
-            { 
-                id: "jd4Ia9OtpNs", ep: "EP.3.5", title: "ตอนพิเศษ", 
-                dur: "2 นาที 30 วินาที", rate: "13+", 
+            {
+                id: "jd4Ia9OtpNs", ep: "EP.3.5", title: "ตอนพิเศษ",
+                dur: "2 นาที 30 วินาที", rate: "13+",
+                driveId: "1aTSr6A76VQRE_aCqNTdwnT6XaiIm7uWA",
+                videoUrl: driveBase + "1aTSr6A76VQRE_aCqNTdwnT6XaiIm7uWA/preview?usp=sharing",
+                poster: "https://img.youtube.com/vi/jd4Ia9OtpNs/maxresdefault.jpg",
                 desc: "เบื้องหลังและมุมมองอีกด้านที่ความจริงอาจไม่ได้มีเพียงด้านเดียว",
                 credits: "Nikonpan, Nasa and Newtun"
             },
-            { 
-                id: "ZUU6_Heef8s", ep: "EP.4", title: "จุดแตกหัก", 
-                dur: "2 นาที 50 วินาที", rate: "13+", 
+            {
+                id: "ZUU6_Heef8s", ep: "EP.4", title: "จุดแตกหัก",
+                dur: "2 นาที 50 วินาที", rate: "13+",
+                driveId: "1KUG1p_iyLd57gBE4h44fpMKn2Qia5sqU",
+                videoUrl: driveBase + "1KUG1p_iyLd57gBE4h44fpMKn2Qia5sqU/preview?usp=sharing",
+                poster: "https://img.youtube.com/vi/ZUU6_Heef8s/maxresdefault.jpg",
                 desc: "ทุกคนเริ่มไม่ไว้ใจกัน บรรยากาศแห่งความหวาดระแวงเข้าปกคลุม",
+                credits: "Nikonpan, Nasa and Newtun"
+            },
+            {
+                id: "uOlQF24CTXY", ep: "EP.5", title: "ตอนที่ 5",
+                dur: "ไม่ระบุ", rate: "13+",
+                driveId: "1x_oCOGmxQXn53Hn_f2SEov9rRf4pd3_r",
+                videoUrl: driveBase + "1x_oCOGmxQXn53Hn_f2SEov9rRf4pd3_r/preview?usp=sharing",
+                poster: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
+                desc: "ใช้ไฟล์วิดีโอจากโฟลเดอร์ Google Drive ตอนนี้",
+                credits: "Nikonpan, Nasa and Newtun"
+            },
+            {
+                id: "uOlQF24CTXY", ep: "EP.6", title: "ตอนที่ 6",
+                dur: "ไม่ระบุ", rate: "13+",
+                driveId: "1Dw2sSX2bwdQ1yJcB1DsyImvlSD-p2K3l",
+                videoUrl: driveBase + "1Dw2sSX2bwdQ1yJcB1DsyImvlSD-p2K3l/preview?usp=sharing",
+                poster: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
+                desc: "ใช้ไฟล์วิดีโอจากโฟลเดอร์ Google Drive ตอนนี้",
+                credits: "Nikonpan, Nasa and Newtun"
+            },
+            {
+                id: "uOlQF24CTXY", ep: "EP.7", title: "ตอนที่ 7",
+                dur: "ไม่ระบุ", rate: "13+",
+                driveId: "1fDn1dq-QPFeQOKaKyZpHa1xO2iPflRrO",
+                videoUrl: driveBase + "1fDn1dq-QPFeQOKaKyZpHa1xO2iPflRrO/preview?usp=sharing",
+                poster: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
+                desc: "ใช้ไฟล์วิดีโอจากโฟลเดอร์ Google Drive ตอนนี้",
+                credits: "Nikonpan, Nasa and Newtun"
+            },
+            {
+                id: "uOlQF24CTXY", ep: "EP.8", title: "ตอนที่ 8",
+                dur: "ไม่ระบุ", rate: "13+",
+                driveId: "1D8eyfB3-ZhmmPOQud8qLybTuWcGDvBgZ",
+                videoUrl: driveBase + "1D8eyfB3-ZhmmPOQud8qLybTuWcGDvBgZ/preview?usp=sharing",
+                poster: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
+                desc: "ใช้ไฟล์วิดีโอจากโฟลเดอร์ Google Drive ตอนนี้",
                 credits: "Nikonpan, Nasa and Newtun"
             }
         ];
@@ -406,9 +459,8 @@
             const data = episodes[index];
             const overlay = document.getElementById('playerOverlay');
             document.getElementById('videoFrame').innerHTML = `
-                <iframe width="100%" height="auto" style="aspect-ratio:16/9; border:none;" 
-                src="https://www.youtube.com/embed/${data.id}?autoplay=1" 
-                allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <iframe src="${data.videoUrl}" allow="autoplay; encrypted-media" allowfullscreen
+                    style="width:100%; aspect-ratio:16/9; border:none; background:#000;"></iframe>
             `;
             document.getElementById('vTitle').innerText = `Breakpoint: ${data.title}`;
             document.getElementById('vEp').innerText = data.ep;
