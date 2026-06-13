@@ -12,23 +12,25 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg: #f5f4f0;
-            --card-bg: #ffffff;
-            --text-primary: #1a1a18;
-            --text-secondary: #5a5a56;
-            --text-tertiary: #9a9a94;
-            --border: rgba(0,0,0,0.12);
-            --border-hover: rgba(0,0,0,0.28);
-            --input-bg: #fafaf8;
-            --secondary-bg: #f1f0ec;
-            --green: #1D9E75;
-            --green-dark: #0F6E56;
-            --green-light: #E1F5EE;
-            --green-text: #0F6E56;
+            --bg: #07111f;
+            --card-bg: #121a28;
+            --text-primary: #eff6ff;
+            --text-secondary: #d5deef;
+            --text-tertiary: #9fb0cb;
+            --border: rgba(148, 163, 184, 0.18);
+            --border-hover: rgba(148, 163, 184, 0.35);
+            --input-bg: #182334;
+            --secondary-bg: #1c2738;
+            --green: #34d399;
+            --green-dark: #10b981;
+            --green-light: rgba(52, 211, 153, 0.14);
+            --green-text: #d1fae5;
         }
 
         body {
-            background-color: var(--bg);
+            background:
+                radial-gradient(circle at top, rgba(52, 211, 153, 0.08), transparent 25%),
+                linear-gradient(180deg, #07111f 0%, #0b1422 45%, #111827 100%);
             color: var(--text-primary);
             font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
@@ -36,6 +38,7 @@
             justify-content: center;
             align-items: flex-start;
             padding: 40px 20px 60px;
+            color-scheme: dark;
         }
 
         .don-wrap {
@@ -183,7 +186,7 @@
         }
         .qr-box {
             display: inline-block;
-            background: white;
+            background: #0f172a;
             border-radius: 10px;
             border: 1px solid var(--border);
             padding: 10px;
@@ -438,28 +441,48 @@
         const name = document.getElementById('dn-name').value.trim();
         const msg  = document.getElementById('dn-msg').value.trim();
         const amt  = document.getElementById('dn-amt').value;
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingEl = document.getElementById('loadingEl');
 
         if (!name) { alert('กรุณาระบุชื่อผู้โดเนท'); return; }
+        if (!WEB_APP_URL || WEB_APP_URL.includes('YOUR_WEB_APP_URL_HERE')) {
+            alert('กรุณาตั้งค่า URL ของ Google Apps Script ก่อนกดยืนยัน');
+            return;
+        }
 
-        document.getElementById('submitBtn').disabled = true;
-        document.getElementById('loadingEl').classList.add('show');
+        submitBtn.disabled = true;
+        loadingEl.classList.add('show');
         setStep(3);
 
         const params = new URLSearchParams({ name, message: msg, amount: amt });
 
-        fetch(WEB_APP_URL, { method: 'POST', body: params })
-            .catch(() => {})
-            .finally(() => {
-                document.getElementById('loadingEl').classList.remove('show');
+        fetch(WEB_APP_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+            body: params.toString()
+        })
+            .then((res) => {
+                if (!res.ok) throw new Error('Request failed with status ' + res.status);
+                return res;
+            })
+            .then(() => {
+                loadingEl.classList.remove('show');
                 document.getElementById('mainForm').style.display = 'none';
                 document.getElementById('qrCard').style.display = 'none';
-                document.getElementById('submitBtn').style.display = 'none';
+                submitBtn.style.display = 'none';
                 const sm = document.getElementById('successMsg');
                 sm.style.display = 'block';
                 sm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            })
+            .catch((err) => {
+                console.error(err);
+                loadingEl.classList.remove('show');
+                submitBtn.disabled = false;
+                setStep(2);
+                alert('ไม่สามารถบันทึกข้อมูลได้ในขณะนี้ กรุณาลองอีกครั้ง');
             });
     }
 </script>
-<p>© 2026 TRIPPLENCJ STUDIO. All Rights Reserved.</p>
+
 </body>
 </html>
