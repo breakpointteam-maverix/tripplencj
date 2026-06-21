@@ -175,34 +175,114 @@
             transform: scale(1.05); 
         }
 
-        /* ===== EPISODES GRID ===== */
+        /* ===== EPISODES SECTION ===== */
         .section { padding: 60px 5%; }
         .section-title { font-size: 1.8rem; margin-bottom: 30px; border-left: 4px solid var(--accent-10); padding-left: 15px; } /* ประยุกต์ใช้ 10% */
 
-        .episode-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+        /* Season Selector */
+        .season-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
-        .ep-card {
-            background: var(--card-30); /* ประยุกต์ใช้ 30% */
-            border-radius: 10px;
-            overflow: hidden;
+        .season-btn {
+            padding: 10px 20px;
+            background: var(--card-30);
+            border: 2px solid var(--line-soft);
+            color: var(--text-main);
             cursor: pointer;
             transition: var(--transition);
-            border: 1px solid var(--line-soft);
+            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
+            border-radius: 5px;
         }
 
-        .ep-card:hover { 
-            transform: scale(1.03); 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.45);
-            border-color: rgba(201, 163, 91, 0.18);
+        .season-btn:hover {
+            border-color: var(--accent-10);
+            color: var(--accent-10);
         }
-        .ep-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
-        .ep-info { padding: 15px; }
-        .ep-info h3 { font-size: 1.1rem; margin-bottom: 5px; }
-        .ep-meta { font-size: 0.85rem; color: var(--text-muted); display: flex; gap: 10px; }
+
+        .season-btn.active {
+            background: var(--accent-10);
+            border-color: var(--accent-10);
+            color: #000;
+        }
+
+        /* Episodes List */
+        .episodes-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .ep-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 150px;
+            gap: 15px;
+            background: var(--card-30);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--line-soft);
+            cursor: pointer;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .ep-row:hover {
+            background: rgba(201, 163, 91, 0.08);
+            border-color: rgba(201, 163, 91, 0.25);
+            transform: translateX(5px);
+        }
+
+        .ep-thumbnail {
+            width: 80px;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .ep-details h3 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .ep-details p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .ep-meta-info {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: flex-end;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .rate-badge {
+            border: 1px solid #444;
+            padding: 2px 8px;
+            border-radius: 3px;
+            color: var(--text-main);
+        }
+
+        @media (max-width: 768px) {
+            .ep-row {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .ep-meta-info {
+                display: none;
+            }
+
+            .ep-thumbnail {
+                width: 60px;
+            }
+        }
 
         /* ===== PLAYER MODAL ===== */
         .player-overlay {
@@ -313,7 +393,8 @@
 
     <main class="section">
         <h2 class="section-title">Breakpoint: ทุกตอน</h2>
-        <div class="episode-grid" id="episodeList"></div>
+        <div class="season-selector" id="seasonSelector"></div>
+        <div class="episodes-list" id="episodeList"></div>
     </main>
 
     <footer>
@@ -357,7 +438,7 @@
 
         const episodes = [
             {
-                id: "uOlQF24CTXY", ep: "EP.1", title: "จุดเริ่มต้น",
+                id: "uOlQF24CTXY", season: 1, ep: "EP.1", title: "จุดเริ่มต้น",
                 dur: "2 นาที 49 วินาที", rate: "13+",
                 driveId: "1M1cL2hv8oIWLR1ZdHWTXgIsMI4NYX4kY",
                 videoUrl: driveBase + "1M1cL2hv8oIWLR1ZdHWTXgIsMI4NYX4kY/preview?usp=sharing",
@@ -366,7 +447,7 @@
                 credits: "Nikonpan, Nasa and Newtun"
             },
             {
-                id: "WrFwGxEqB3M", ep: "EP.2", title: "ความจริงเริ่มเผย",
+                id: "WrFwGxEqB3M", season: 1, ep: "EP.2", title: "ความจริงเริ่มเผย",
                 dur: "2 นาที 48 วินาที", rate: "13+",
                 driveId: "1tXGhOxXgfQvgZ-jDB-eBHi5exSBEk1Bc",
                 videoUrl: driveBase + "1tXGhOxXgfQvgZ-jDB-eBHi5exSBEk1Bc/preview?usp=sharing",
@@ -375,7 +456,7 @@
                 credits: "Nikonpan, Nasa and Newtun"
             },
             {
-                id: "wXiwxUFf1aU", ep: "EP.3", title: "อดีตที่ถูกซ่อน",
+                id: "wXiwxUFf1aU", season: 1, ep: "EP.3", title: "อดีตที่ถูกซ่อน",
                 dur: "3 นาที 22 วินาที", rate: "13+",
                 driveId: "1QSghpbLTKyA4dYDtRCRPGU9bW7Df0mbT",
                 videoUrl: driveBase + "1QSghpbLTKyA4dYDtRCRPGU9bW7Df0mbT/preview?usp=sharing",
@@ -384,7 +465,7 @@
                 credits: "Nikonpan, Nasa and Newtun"
             },
             {
-                id: "jd4Ia9OtpNs", ep: "EP.3.5", title: "ตอนพิเศษ",
+                id: "jd4Ia9OtpNs", season: 1, ep: "EP.3.5", title: "ตอนพิเศษ",
                 dur: "2 นาที 30 วินาที", rate: "13+",
                 driveId: "1aTSr6A76VQRE_aCqNTdwnT6XaiIm7uWA",
                 videoUrl: driveBase + "1aTSr6A76VQRE_aCqNTdwnT6XaiIm7uWA/preview?usp=sharing",
@@ -393,7 +474,7 @@
                 credits: "Nikonpan, Nasa and Newtun"
             },
             {
-                id: "ZUU6_Heef8s", ep: "EP.4", title: "จุดแตกหัก",
+                id: "ZUU6_Heef8s", season: 1, ep: "EP.4", title: "จุดแตกหัก",
                 dur: "2 นาที 50 วินาที", rate: "13+",
                 driveId: "1KUG1p_iyLd57gBE4h44fpMKn2Qia5sqU",
                 videoUrl: driveBase + "1KUG1p_iyLd57gBE4h44fpMKn2Qia5sqU/preview?usp=sharing",
@@ -402,7 +483,7 @@
                 credits: "Nikonpan, Nasa and Newtun"
             },
             {
-                id: "uOlQF24CTXY", ep: "EP.5", title: "ตอนที่ 5",
+                id: "uOlQF24CTXY", season: 1, ep: "EP.5", title: "ตอนที่ 5",
                 dur: "ไม่ระบุ", rate: "13+",
                 driveId: "1x_oCOGmxQXn53Hn_f2SEov9rRf4pd3_r",
                 videoUrl: driveBase + "1x_oCOGmxQXn53Hn_f2SEov9rRf4pd3_r/preview?usp=sharing",
@@ -411,7 +492,7 @@
                 credits: "Nikonpan, Nasa and Newtun"
             },
             {
-                id: "uOlQF24CTXY", ep: "EP.6", title: "ตอนที่ 6",
+                id: "uOlQF24CTXY", season: 1, ep: "EP.6", title: "ตอนที่ 6",
                 dur: "ไม่ระบุ", rate: "13+",
                 driveId: "1Dw2sSX2bwdQ1yJcB1DsyImvlSD-p2K3l",
                 videoUrl: driveBase + "1Dw2sSX2bwdQ1yJcB1DsyImvlSD-p2K3l/preview?usp=sharing",
@@ -420,7 +501,7 @@
                 credits: "Nikonpan, Nasa and Newtun"
             },
             {
-                id: "uOlQF24CTXY", ep: "EP.7", title: "ตอนที่ 7",
+                id: "uOlQF24CTXY", season: 1, ep: "EP.7", title: "ตอนที่ 7",
                 dur: "ไม่ระบุ", rate: "13+",
                 driveId: "1fDn1dq-QPFeQOKaKyZpHa1xO2iPflRrO",
                 videoUrl: driveBase + "1fDn1dq-QPFeQOKaKyZpHa1xO2iPflRrO/preview?usp=sharing",
@@ -429,7 +510,7 @@
                 credits: "Nikonpan, Nasa and Newtun"
             },
             {
-                id: "uOlQF24CTXY", ep: "EP.8", title: "ตอนที่ 8",
+                id: "uOlQF24CTXY", season: 1, ep: "EP.8", title: "ตอนที่ 8",
                 dur: "ไม่ระบุ", rate: "13+",
                 driveId: "1D8eyfB3-ZhmmPOQud8qLybTuWcGDvBgZ",
                 videoUrl: driveBase + "1D8eyfB3-ZhmmPOQud8qLybTuWcGDvBgZ/preview?usp=sharing",
@@ -439,21 +520,54 @@
             }
         ];
 
-        const container = document.getElementById('episodeList');
-        episodes.forEach((item, index) => {
-            container.innerHTML += `
-                <div class="ep-card" onclick="playVideo(${index})">
-                    <img src="https://img.youtube.com/vi/${item.id}/maxresdefault.jpg" alt="${item.ep}">
-                    <div class="ep-info">
-                        <h3>${item.ep}: ${item.title}</h3>
-                        <div class="ep-meta">
+        let currentSeason = 1;
+
+        // Initialize season selector
+        const seasons = [...new Set(episodes.map(ep => ep.season))].sort();
+        const seasonSelector = document.getElementById('seasonSelector');
+        seasons.forEach(season => {
+            const btn = document.createElement('button');
+            btn.className = 'season-btn' + (season === 1 ? ' active' : '');
+            btn.innerText = `Season ${season}`;
+            btn.onclick = () => switchSeason(season);
+            seasonSelector.appendChild(btn);
+        });
+
+        function switchSeason(season) {
+            currentSeason = season;
+            // Update active button
+            document.querySelectorAll('.season-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            // Render episodes for selected season
+            renderEpisodes(season);
+        }
+
+        function renderEpisodes(season) {
+            const container = document.getElementById('episodeList');
+            container.innerHTML = '';
+            const seasonEpisodes = episodes.filter(ep => ep.season === season);
+            seasonEpisodes.forEach((item, index) => {
+                const actualIndex = episodes.indexOf(item);
+                container.innerHTML += `
+                    <div class="ep-row" onclick="playVideo(${actualIndex})">
+                        <img src="${item.poster}" alt="${item.ep}" class="ep-thumbnail">
+                        <div class="ep-details">
+                            <h3>${item.ep}: ${item.title}</h3>
+                            <p>${item.desc}</p>
+                        </div>
+                        <div class="ep-meta-info">
                             <span><i class="far fa-clock"></i> ${item.dur}</span>
-                            <span>${item.rate}</span>
+                            <span class="rate-badge">${item.rate}</span>
                         </div>
                     </div>
-                </div>
-            `;
-        });
+                `;
+            });
+        }
+
+        // Initial render
+        renderEpisodes(1);
 
         function playVideo(index) {
             const data = episodes[index];
