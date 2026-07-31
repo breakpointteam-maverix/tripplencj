@@ -397,7 +397,7 @@
     // ตั้งค่าตรงนี้
     // ============================================================
     const PP_ID = "0639655474";           // เบอร์ PromptPay / เลขบัตรประชาชน
-    const WEB_APP_URL = "YOUR_WEB_APP_URL_HERE"; // URL ของ Google Apps Script
+    const STORAGE_KEY = "tripplencj-donations";
     // ============================================================
 
     function setAmt(v, btn) {
@@ -437,6 +437,23 @@
         qrCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
+    function saveDonation(name, msg, amt) {
+        try {
+            const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            existing.push({
+                name,
+                message: msg,
+                amount: amt,
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+            return true;
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+    }
+
     function handleSubmit() {
         const name = document.getElementById('dn-name').value.trim();
         const msg  = document.getElementById('dn-msg').value.trim();
@@ -445,42 +462,29 @@
         const loadingEl = document.getElementById('loadingEl');
 
         if (!name) { alert('กรุณาระบุชื่อผู้โดเนท'); return; }
-        if (!WEB_APP_URL || WEB_APP_URL.includes('YOUR_WEB_APP_URL_HERE')) {
-            alert('กรุณาตั้งค่า URL ของ Google Apps Script ก่อนกดยืนยัน');
-            return;
-        }
 
         submitBtn.disabled = true;
         loadingEl.classList.add('show');
         setStep(3);
 
-        const params = new URLSearchParams({ name, message: msg, amount: amt });
+        setTimeout(() => {
+            const saved = saveDonation(name, msg, amt);
+            loadingEl.classList.remove('show');
 
-        fetch(WEB_APP_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-            body: params.toString()
-        })
-            .then((res) => {
-                if (!res.ok) throw new Error('Request failed with status ' + res.status);
-                return res;
-            })
-            .then(() => {
-                loadingEl.classList.remove('show');
-                document.getElementById('mainForm').style.display = 'none';
-                document.getElementById('qrCard').style.display = 'none';
-                submitBtn.style.display = 'none';
-                const sm = document.getElementById('successMsg');
-                sm.style.display = 'block';
-                sm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            })
-            .catch((err) => {
-                console.error(err);
-                loadingEl.classList.remove('show');
+            if (!saved) {
                 submitBtn.disabled = false;
                 setStep(2);
-                alert('ไม่สามารถบันทึกข้อมูลได้ในขณะนี้ กรุณาลองอีกครั้ง');
-            });
+                alert('ไม่สามารถบันทึกข้อมูลได้ในเบราว์เซอร์นี้ กรุณาลองอีกครั้ง');
+                return;
+            }
+
+            document.getElementById('mainForm').style.display = 'none';
+            document.getElementById('qrCard').style.display = 'none';
+            submitBtn.style.display = 'none';
+            const sm = document.getElementById('successMsg');
+            sm.style.display = 'block';
+            sm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 400);
     }
 </script>
 
