@@ -356,22 +356,6 @@
 </head>
 <body>
 
-    <div id="splash-screen">
-        <div class="splash-content">
-            <img src="Pa.png" alt="น้อมรำลึกในพระกรุณาธิคุณ" class="royal-image">
-            
-            <h1 class="splash-text">น้อมรำลึกในพระกรุณาธิคุณ</h1>
-            <p class="splash-subtext-main">เนื่องในการสิ้นพระชนม์ของ</p>
-            <p class="splash-title">สมเด็จพระเจ้าลูกเธอ เจ้าฟ้าพัชรกิติยาภา นเรนทิราเทพยวดี<br>กรมหลวงราชสาริณีสิริพัชร มหาวัชรราชธิดา</p>
-            
-            <div class="splash-space"></div>
-            
-            <p class="splash-subtext">ด้วยความสำนึกในพระกรุณาธิคุณอย่างหาที่สุดมิได้</p>
-            <p class="splash-owner">TrippleNCJ Studio และคณะผู้สร้างสรรค์</p>
-            
-            <button class="enter-btn" onclick="closeSplash()">เข้าสู่เว็บไซต์</button>
-        </div>
-    </div>
     <nav id="navbar">
         <a href="#" class="logo">
             <img src="https://i.ibb.co/VcLBbLB0/3364-removebg-preview-1.png" alt="Logo">
@@ -425,14 +409,8 @@
     </div>
 
     <script>
-        // ฟังก์ชันสั่งให้ Splash Screen ค่อยๆ จางลง และซ่อนไปเมื่อกดปุ่มเข้าสู่เว็บไซต์
-        function closeSplash() {
-            const splash = document.getElementById('splash-screen');
-            splash.style.opacity = '0';
-            setTimeout(() => {
-                splash.style.display = 'none';
-            }, 800); // 800 มิลลิวินาที สัมพันธ์กับ CSS transition
-        }
+
+        
 
         const driveBase = "https://drive.google.com/file/d/";
 
