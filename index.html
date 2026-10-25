@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Breakpoint | TrippleNCJ Studio</title>
-<meta name="description" content="Breakpoint ซีรีส์สืบสวนลึกลับจาก TrippleNCJ Studio ดูได้ทุกตอนฟรี">
+<title>เกมบี้มดและซีรีส์ Breakpoint | TrippleNCJ Studio</title>
+<meta name="description" content="เกมบี้มดเล่นฟรีบนเว็บ พร้อมซีรีส์ Breakpoint จาก TrippleNCJ Studio">
 <meta name="theme-color" content="#080808">
-<meta property="og:title" content="Breakpoint | TrippleNCJ Studio">
+<meta property="og:title" content="เกมบี้มดและซีรีส์ Breakpoint | TrippleNCJ Studio">
 <meta property="og:description" content="ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง">
 <meta property="og:image" content="https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +29,7 @@ nav.scrolled{background:var(--bg);height:62px;border-bottom:1px solid var(--line
 .donate:hover{transform:translateY(-2px)}
 
 /* HERO */
-.hero{min-height:80vh;min-height:80svh;display:flex;align-items:center;padding:100px 5% 50px;background:linear-gradient(to right,rgba(8,8,8,.96) 25%,rgba(8,8,8,.35) 85%),linear-gradient(to top,var(--bg),transparent 30%),url('https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg') center/cover}
+.hero{min-height:80vh;min-height:80svh;display:flex;align-items:center;padding:100px 5% 60px;background:radial-gradient(circle at 75% 40%,rgba(201,163,91,.22),transparent 55%),linear-gradient(to top,var(--bg),transparent 25%),#0d0a05}
 .hero-content{max-width:640px}
 .hero-tag{color:var(--gold);font-weight:600;margin-bottom:8px}
 .hero h1{font-size:clamp(2.8rem,9vw,5rem);line-height:1.1;margin-bottom:18px}
@@ -93,6 +93,15 @@ dialog::backdrop{background:rgba(0,0,0,.88);backdrop-filter:blur(4px)}
   .body{padding:4px 16px 22px}
 }
 
+/* GAME TESTER */
+.game-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 62px 10px 20px;font-weight:600}
+.game-wrap{position:relative}
+#gCanvas{display:block;width:100%;height:min(60dvh,460px);touch-action:none;cursor:crosshair;background:#1b1409}
+#gStart{position:absolute;inset:0;margin:auto;width:max-content;height:max-content;text-align:center}
+#gStart[hidden]{display:none}
+.game-note{padding:12px 20px;color:var(--muted);font-size:.85rem}
+.game-note a{color:var(--gold)}
+
 /* FOOTER */
 footer{padding:48px 5%;text-align:center;border-top:1px solid rgba(255,255,255,.08);color:#8b8478;background:#050505}
 .social{display:flex;justify-content:center;gap:22px;margin-bottom:14px;font-size:1.6rem}
@@ -117,13 +126,11 @@ footer{padding:48px 5%;text-align:center;border-top:1px solid rgba(255,255,255,.
 
 <header class="hero">
   <div class="hero-content">
-    <p class="hero-tag"><svg class="i"><use href="#play"/></svg> TRIPPLENCJ ORIGINAL</p>
-    <h1>BREAKPOINT</h1>
-    <p class="lead">ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง ร่วมค้นหาความจริงที่ถูกซ่อนไว้ภายใต้คำลวง</p>
+    <p class="hero-tag"><svg class="i"><use href="#play"/></svg> TRIPPLENCJ GAME</p>
+    <h1>เกมบี้มด</h1>
+    <p class="lead">แตะมดให้ได้มากที่สุดก่อนหมดเวลา เลือกระดับความยากได้ เล่นฟรีบนเว็บ</p>
     <div class="btns">
-      <button class="btn btn-play" id="latestBtn"><svg class="i"><use href="#play"/></svg> รับชมตอนล่าสุด</button>
-      <button class="btn btn-info" id="trailerBtn"><svg class="i"><use href="#play"/></svg> ดูตัวอย่าง</button>
-      <button class="btn btn-info" id="pickBtn"><svg class="i"><use href="#list"/></svg> เลือกตอน</button>
+      <button class="btn btn-play" id="playGameBtn"><svg class="i"><use href="#play"/></svg> เล่นเกม</button>
     </div>
   </div>
 </header>
@@ -154,6 +161,23 @@ footer{padding:48px 5%;text-align:center;border-top:1px solid rgba(255,255,255,.
     <div class="list-head"><h3>เลือกตอน</h3><div class="seasons" id="seasons"></div></div>
     <div class="episodes" id="episodes"></div>
   </div>
+</dialog>
+
+<dialog id="gameDlg" aria-label="เกมบี้มด">
+  <button class="close" id="gameClose" aria-label="ปิด">✕</button>
+  <div class="game-bar">
+    <span id="gScore">คะแนน 0</span><span id="gTime">เวลา 0</span>
+    <div class="seasons" id="gModes">
+      <button class="season-btn" data-m="easy" aria-pressed="true">ง่าย</button>
+      <button class="season-btn" data-m="normal" aria-pressed="false">ปกติ</button>
+      <button class="season-btn" data-m="hard" aria-pressed="false">ยาก</button>
+    </div>
+  </div>
+  <div class="game-wrap">
+    <canvas id="gCanvas" aria-label="พื้นที่เล่นเกมบี้มด"></canvas>
+    <button class="btn btn-play" id="gStart">เริ่มเล่น</button>
+  </div>
+  <p class="game-note">แตะหรือคลิกที่มดเพื่อบี้ให้ได้มากที่สุดก่อนหมดเวลา · เลือกระดับความยากได้ด้านบน</p>
 </dialog>
 
 <script>
@@ -251,8 +275,6 @@ $("seasons").addEventListener("click", e => {
   if (b) { season = +b.dataset.s; renderEpisodes(); }
 });
 
-$("latestBtn").onclick = () => openShow(0, shows[0].episodes.length - 1);
-$("pickBtn").onclick = () => openShow(0);
 
 function playTrailer(i) {
   openShow(i);
@@ -265,19 +287,93 @@ function playTrailer(i) {
   $("vDesc").textContent = show.desc;
   $("now").hidden = false;
 }
-$("trailerBtn").onclick = () => playTrailer(0);
 $("stage").addEventListener("click", e => {
   if (e.target.closest(".trailer-btn")) playTrailer(shows.indexOf(show));
 });
 $("closeBtn").onclick = () => popup.close();
-popup.addEventListener("click", e => { if (e.target === popup) popup.close(); });
-popup.addEventListener("close", () => {
-  $("stage").innerHTML = "";
-  document.body.style.overflow = "";
-});
 
-const nav = $("navbar");
-addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 50), {passive: true});
-</script>
-</body>
-</html>
+
+const MODES = {
+  easy:   {size: 30, speed: .8,  gap: 900, time: 45, max: 6},
+  normal: {size: 22, speed: 1.4, gap: 700, time: 40, max: 9},
+  hard:   {size: 15, speed: 2.2, gap: 500, time: 30, max: 12}
+};
+const cv = $("gCanvas"), cx = cv.getContext("2d");
+let mode = "easy", ants = [], splats = [], score = 0, running = false, raf = 0, lastSpawn = 0, endAt = 0;
+
+function fit() {
+  const r = cv.getBoundingClientRect();
+  cv.width = r.width; cv.height = r.height;
+}
+function stopGame() { running = false; cancelAnimationFrame(raf); }
+function resetGame() {
+  stopGame(); fit();
+  score = 0; ants = []; splats = [];
+  $("gScore").textContent = "คะแนน 0";
+  $("gTime").textContent = "เวลา " + MODES[mode].time;
+  $("gStart").hidden = false;
+  $("gStart").textContent = "เริ่มเล่น";
+  draw();
+}
+function startGame() {
+  stopGame(); fit();
+  score = 0; ants = []; splats = []; lastSpawn = 0;
+  $("gScore").textContent = "คะแนน 0";
+  $("gStart").hidden = true;
+  running = true;
+  endAt = performance.now() + MODES[mode].time * 1000;
+  raf = requestAnimationFrame(loop);
+}
+function spawn() {
+  const m = MODES[mode];
+  ants.push({x: Math.random() * cv.width, y: Math.random() * cv.height, dir: Math.random() * 6.28, v: m.speed * (.8 + Math.random() * .4), s: m.size, t: 0});
+}
+function loop(t) {
+  const m = MODES[mode];
+  $("gTime").textContent = "เวลา " + Math.max(0, Math.ceil((endAt - t) / 1000));
+  if (t - lastSpawn > m.gap && ants.length < m.max) { spawn(); lastSpawn = t; }
+  ants.forEach(a => {
+    a.dir += (Math.random() - .5) * .12;
+    a.x += Math.sin(a.dir) * a.v;
+    a.y -= Math.cos(a.dir) * a.v;
+    if (a.x < 0 || a.x > cv.width) a.dir = -a.dir;
+    if (a.y < 0 || a.y > cv.height) a.dir = Math.PI - a.dir;
+    a.x = Math.min(cv.width, Math.max(0, a.x));
+    a.y = Math.min(cv.height, Math.max(0, a.y));
+  });
+  draw();
+  if (t >= endAt) {
+    running = false;
+    $("gStart").hidden = false;
+    $("gStart").textContent = `หมดเวลา! บี้ได้ ${score} ตัว · เล่นอีกครั้ง`;
+    return;
+  }
+  raf = requestAnimationFrame(loop);
+}
+function drawAnt(a) {
+  const s = a.s;
+  a.t += a.v;
+  cx.save();
+  cx.translate(a.x, a.y);
+  cx.rotate(a.dir);
+  cx.strokeStyle = "#d9c9a8";
+  cx.lineWidth = Math.max(1.5, s / 10);
+  [-.35, 0, .35].forEach((o, i) => {
+    const w = Math.sin(a.t / 4 + i * 2) * s * .25;
+    cx.beginPath();
+    cx.moveTo(-s * .8, o * s + w);
+    cx.lineTo(s * .8, o * s - w);
+    cx.stroke();
+  });
+  cx.fillStyle = "#c9a35b";
+  [[-.8, .3, .3], [0, .35, .4], [.85, .45, .55]].forEach(([y, rx, ry]) => {
+    cx.beginPath();
+    cx.ellipse(0, y * s, rx * s, ry * s, 0, 0, 7);
+    cx.fill();
+  });
+  cx.restore();
+}
+function draw() {
+  cx.fillStyle = "#1b1409";
+  cx.fillRect(0, 0, cv.width, cv.height);
+  splats = splats.filter
