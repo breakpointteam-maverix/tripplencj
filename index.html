@@ -1,604 +1,265 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrippleNCJ Studio | Breakpoint</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Breakpoint | TrippleNCJ Studio</title>
+<meta name="description" content="Breakpoint ซีรีส์สืบสวนลึกลับจาก TrippleNCJ Studio ดูได้ทุกตอนฟรี">
+<meta name="theme-color" content="#080808">
+<meta property="og:title" content="Breakpoint | TrippleNCJ Studio">
+<meta property="og:description" content="ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง">
+<meta property="og:image" content="https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--card:#171717;--gold:#c9a35b;--gold-light:#e7c97b;--text:#f1ebde;--muted:#c5baa9;--line:rgba(201,163,91,.18)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Kanit',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+svg.i{width:1em;height:1em;fill:currentColor;vertical-align:-.125em}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold-light);outline-offset:3px}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+/* NAV */
+nav{position:fixed;top:0;width:100%;height:72px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;z-index:100;background:linear-gradient(rgba(8,8,8,.9),transparent);transition:background .3s,height .3s}
+nav.scrolled{background:var(--bg);height:62px;border-bottom:1px solid var(--line)}
+.logo img{height:44px;width:auto;display:block}
+.donate{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#111;text-decoration:none;font-weight:600;transition:transform .2s}
+.donate:hover{transform:translateY(-2px)}
 
-    <style>
-        /* ===== 60-30-10 COLOR RULE ===== */
-        :root {
-            --bg-60: #080808;       /* พื้นหลังดำหม่นอ่อน */
-            --card-30: #171717;     /* การ์ดและแผงดำหม่น */
-            --accent-10: #c9a35b;   /* สีทองอ่อนสำหรับไฮไลท์และข้อความไว้อาลัย */
-            --accent-deep: #8d6a2b;
-            --text-main: #f1ebde;
-            --text-muted: #c5baa9;
-            --line-soft: rgba(201, 163, 91, 0.14);
-            --transition: all 0.3s ease;
-        }
+/* HERO */
+.hero{min-height:80vh;min-height:80svh;display:flex;align-items:center;padding:100px 5% 50px;background:linear-gradient(to right,rgba(8,8,8,.96) 25%,rgba(8,8,8,.35) 85%),linear-gradient(to top,var(--bg),transparent 30%),url('https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg') center/cover}
+.hero-content{max-width:640px}
+.hero-tag{color:var(--gold);font-weight:600;margin-bottom:8px}
+.hero h1{font-size:clamp(2.8rem,9vw,5rem);line-height:1.1;margin-bottom:18px}
+.lead{color:var(--muted);font-size:1.1rem;margin-bottom:28px;max-width:34em}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 28px;border:0;border-radius:6px;font-weight:600;font-size:1.05rem;cursor:pointer;transition:background .2s,transform .2s}
+.btn:hover{transform:scale(1.04)}
+.btn-play{background:var(--text);color:#000}
+.btn-play:hover{background:var(--gold)}
+.btn-info{background:rgba(109,109,110,.55);color:var(--text)}
+.btn-info:hover{background:rgba(109,109,110,.8)}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+/* POSTERS */
+.section{padding:40px 5% 64px;max-width:1200px;margin:0 auto}
+.section-title{font-size:1.5rem;margin-bottom:20px;border-left:4px solid var(--gold);padding-left:14px}
+.posters{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,200px));gap:18px}
+.poster{position:relative;aspect-ratio:2/3;border:0;border-radius:8px;overflow:hidden;cursor:pointer;background:var(--card);text-align:left;transition:transform .25s,box-shadow .25s}
+.poster:hover{transform:scale(1.05);box-shadow:0 10px 30px rgba(0,0,0,.7),0 0 0 2px var(--gold);z-index:2}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.poster::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 5%,transparent 55%)}
+.poster-info{position:absolute;left:12px;right:12px;bottom:12px;z-index:1}
+.poster-info b{display:block;font-size:1.15rem;line-height:1.2}
+.poster-info small{color:var(--muted)}
 
-        body {
-            font-family: 'Kanit', sans-serif;
-            background: var(--bg-60); /* ประยุกต์ใช้ 60% */
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+/* POPUP */
+dialog{width:min(900px,calc(100% - 24px));max-height:calc(100dvh - 24px);margin:auto;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:12px;overflow:auto;padding:0}
+dialog::backdrop{background:rgba(0,0,0,.88);backdrop-filter:blur(4px)}
+.close{position:absolute;right:10px;top:10px;z-index:5;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(15,15,15,.9);font-size:1.1rem;cursor:pointer}
+.close:hover{background:var(--gold);color:#000}
+.stage{position:relative;aspect-ratio:16/9;background:#000}
+.stage img,.stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
+.stage::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--card),transparent 55%);pointer-events:none}
+.stage.playing::after{display:none}
+.stage-text{position:absolute;left:24px;right:24px;bottom:16px;z-index:2}
+.stage.playing .stage-text{display:none}
+.stage-text h2{font-size:clamp(1.6rem,5vw,2.4rem);line-height:1.15}
+.body{padding:8px 24px 28px}
+.now{margin:12px 0 4px}
+.now .ep{color:var(--gold);font-weight:600}
+.meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;color:var(--muted);font-size:.92rem;margin-bottom:8px}
+.badge{border:1px solid #555;padding:1px 8px;border-radius:3px;color:var(--text);font-size:.8rem}
+.credits{color:var(--muted);font-size:.88rem;margin:6px 0 18px}
+.credits span{color:var(--text)}
+.list-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px}
+.list-head h3{font-size:1.2rem}
+.seasons{display:flex;gap:8px;flex-wrap:wrap}
+.season-btn{padding:5px 14px;background:transparent;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.season-btn[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#000}
+.episodes{display:grid;gap:10px}
+.ep-row{display:grid;grid-template-columns:112px 1fr auto;gap:14px;align-items:center;width:100%;text-align:left;background:#101010;padding:10px;border:1px solid transparent;border-radius:8px;cursor:pointer;transition:background .2s,border-color .2s}
+.ep-row:hover{background:rgba(201,163,91,.08);border-color:rgba(201,163,91,.35)}
+.ep-row[aria-current="true"]{border-color:var(--gold);background:rgba(201,163,91,.12)}
+.ep-row img{width:112px;aspect-ratio:16/9;object-fit:cover;border-radius:4px;background:#000}
+.ep-row h4{font-size:1rem;font-weight:600}
+.ep-row p{font-size:.85rem;color:var(--muted)}
+.ep-dur{font-size:.85rem;color:var(--muted);white-space:nowrap}
+@media(max-width:620px){
+  .ep-row{grid-template-columns:88px 1fr;gap:10px}
+  .ep-row img{width:88px}
+  .ep-dur{display:none}
+  .body{padding:4px 16px 22px}
+}
 
-        /* ===== SPLASH SCREEN (ไว้อาลัย - เวอร์ชันคริสเตียน) ===== */
-        #splash-screen {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            min-height: 100vh;
-            min-height: 100dvh;
-            height: 100dvh;
-            background-color: #090909; /* สีพื้นหลังโทนเข้มและสงบนิ่ง */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            z-index: 99999; /* อยู่เหนือทุกเมนูและ Navbar ในเว็บ */
-            opacity: 1;
-            transition: opacity 0.8s ease-in-out;
-            color: #ffffff;
-            font-family: 'Kanit', sans-serif;
-            text-align: center;
-            overflow-y: auto;
-            padding: 24px 16px;
-        }
-
-        .splash-content {
-            width: 100%;
-            max-width: 650px;
-            padding: 30px;
-            margin: auto;
-        }
-
-        /* รูปพระฉายาลักษณ์องค์ภา */
-        .royal-image {
-            max-width: min(100%, 320px);
-            max-height: 380px;
-            width: auto;
-            margin-bottom: 25px;
-            border: 2px solid #c9a35b; /* กรอบสีทองนวลสุภาพ */
-            box-shadow: 0px 4px 20px rgba(0,0,0,0.6);
-        }
-
-        .splash-text {
-            font-size: 26px;
-            font-weight: 600;
-            color: #dfb76c;
-            margin-bottom: 10px;
-        }
-
-        .splash-subtext-main {
-            font-size: 16px;
-            color: #bbbbbb;
-            margin-bottom: 5px;
-        }
-
-        .splash-title {
-            font-size: 18px;
-            font-weight: 600;
-            line-height: 1.6;
-            color: #ffffff;
-            margin-bottom: 20px;
-        }
-
-        .splash-space {
-            height: 1px;
-            background: linear-gradient(to right, transparent, #dfb76c, transparent);
-            margin: 20px auto;
-            width: 60%;
-        }
-
-        .splash-subtext {
-            font-size: 15px;
-            color: #cccccc;
-            margin-bottom: 5px;
-        }
-
-        .splash-owner {
-            font-size: 16px;
-            color: #dfb76c;
-            font-weight: 600;
-        }
-
-        /* ปุ่มเข้าสู่เว็บไซต์ */
-        .enter-btn {
-            margin-top: 35px;
-            background-color: transparent;
-            color: #d6ba80;
-            border: 1px solid #c9a35b;
-            padding: 10px 35px;
-            font-size: 15px;
-            font-family: 'Kanit', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 1px;
-        }
-
-        .enter-btn:hover {
-            background-color: #c9a35b;
-            color: #111111;
-        }
-
-        /* ===== NAVBAR ===== */
-        nav {
-            position: fixed;
-            top: 0; width: 100%; height: 75px;
-            padding: 0 5%;
-            display: flex; align-items: center;
-            justify-content: space-between;
-            z-index: 1000;
-            background: linear-gradient(to bottom, rgba(11,11,11,0.9), transparent);
-            transition: var(--transition);
-        }
-
-        nav.scrolled { 
-            background: var(--bg-60); 
-            height: 65px; 
-            border-bottom: 1px solid var(--line-soft); 
-        }
-        .logo img { height: 45px; }
-
-        .nav-donate-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, var(--accent-10), #e7c97b);
-            color: #111;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            box-shadow: 0 6px 20px rgba(201, 163, 91, 0.18);
-            transition: var(--transition);
-        }
-
-        .nav-donate-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(201, 163, 91, 0.28);
-        }
-
-        /* ===== HERO ===== */
-        .hero {
-            height: 100vh;
-            display: flex; align-items: center;
-            padding: 0 5%;
-            position: relative;
-            background: linear-gradient(to right, rgba(11,11,11,0.95) 20%, transparent 80%),
-                        url('https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg') center/cover;
-        }
-
-        .hero-content { max-width: 650px; z-index: 2; }
-        .hero-tag { color: var(--accent-10); font-weight: 600; letter-spacing: 2px; margin-bottom: 10px; } /* ประยุกต์ใช้ 10% */
-        .hero h1 { font-size: clamp(3rem, 8vw, 5rem); line-height: 1.1; margin-bottom: 20px; }
-        
-        .btn-play {
-            padding: 12px 30px; border-radius: 5px; font-size: 1.1rem;
-            cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
-            font-weight: 600; border: none; 
-            background: var(--text-main); color: #000;
-            transition: var(--transition);
-        }
-        .btn-play:hover { 
-            background: var(--accent-10); /* ประยุกต์ใช้ 10% เมื่อ Hover */
-            color: var(--text-main); 
-            transform: scale(1.05); 
-        }
-
-        /* ===== EPISODES SECTION ===== */
-        .section { padding: 60px 5%; }
-        .section-title { font-size: 1.8rem; margin-bottom: 30px; border-left: 4px solid var(--accent-10); padding-left: 15px; } /* ประยุกต์ใช้ 10% */
-
-        /* Season Selector */
-        .season-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .season-btn {
-            padding: 10px 20px;
-            background: var(--card-30);
-            border: 2px solid var(--line-soft);
-            color: var(--text-main);
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: 'Kanit', sans-serif;
-            font-size: 1rem;
-            border-radius: 5px;
-        }
-
-        .season-btn:hover {
-            border-color: var(--accent-10);
-            color: var(--accent-10);
-        }
-
-        .season-btn.active {
-            background: var(--accent-10);
-            border-color: var(--accent-10);
-            color: #000;
-        }
-
-        /* Episodes List */
-        .episodes-list {
-            display: grid;
-            gap: 15px;
-        }
-
-        .ep-row {
-            display: grid;
-            grid-template-columns: 80px 1fr 150px;
-            gap: 15px;
-            background: var(--card-30);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--line-soft);
-            cursor: pointer;
-            align-items: center;
-            transition: var(--transition);
-        }
-
-        .ep-row:hover {
-            background: rgba(201, 163, 91, 0.08);
-            border-color: rgba(201, 163, 91, 0.25);
-            transform: translateX(5px);
-        }
-
-        .ep-thumbnail {
-            width: 80px;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-
-        .ep-details h3 {
-            font-size: 1rem;
-            margin-bottom: 5px;
-            color: var(--text-main);
-        }
-
-        .ep-details p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .ep-meta-info {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: flex-end;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .rate-badge {
-            border: 1px solid #444;
-            padding: 2px 8px;
-            border-radius: 3px;
-            color: var(--text-main);
-        }
-
-        @media (max-width: 768px) {
-            .ep-row {
-                grid-template-columns: 60px 1fr;
-            }
-
-            .ep-meta-info {
-                display: none;
-            }
-
-            .ep-thumbnail {
-                width: 60px;
-            }
-        }
-
-        /* ===== PLAYER MODAL ===== */
-        .player-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            z-index: 2000; display: none; align-items: flex-start; justify-content: center;
-            padding: 20px; overflow-y: auto; backdrop-filter: blur(5px);
-        }
-
-        .player-box {
-            width: 100%; max-width: 1000px; max-height: calc(100vh - 40px);
-            background: var(--card-30); /* ประยุกต์ใช้ 30% ให้กล่องวิดีโอลอยเด่นขึ้นมาจากพื้นหลัง */
-            border-radius: 12px; overflow: auto; position: relative; margin: 20px auto;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
-        }
-
-        .close-btn {
-            position: fixed; right: 18px; top: 18px; z-index: 2100;
-            background: rgba(15, 15, 15, 0.92); color: var(--text-main); border: 1px solid var(--line-soft);
-            width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;
-            transition: var(--transition); box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-        }
-        .close-btn:hover { background: var(--accent-10); } /* ประยุกต์ใช้ 10% */
-
-        .video-details { padding: 30px; }
-        .video-meta-row { display: flex; align-items: center; gap: 15px; margin: 10px 0 20px; color: var(--text-muted); font-size: 0.95rem; }
-        .rate-badge { border: 1px solid #444; padding: 1px 6px; font-size: 0.8rem; border-radius: 3px; color: var(--text-main); }
-        .credits-box { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: var(--text-muted); }
-        .credits-box span { color: var(--text-main); }
-
-        /* ===== FOOTER ===== */
-        footer { padding: 50px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: #444; background: #070707; }
-        .social { margin-bottom: 15px; font-size: 1.5rem; display: flex; justify-content: center; gap: 20px; }
-        .social a { color: #444; transition: var(--transition); }
-        .social a:hover { color: var(--accent-10); } /* ประยุกต์ใช้ 10% */
-
-        @media (max-width: 768px) { .hero { background-position: 75% center; } }
-
-        @media (max-height: 760px), (max-width: 520px) {
-            #splash-screen {
-                padding: 16px 12px;
-            }
-
-            .splash-content {
-                padding: 12px;
-            }
-
-            .royal-image {
-                max-height: 32vh;
-                margin-bottom: 14px;
-            }
-
-            .splash-text {
-                font-size: 21px;
-            }
-
-            .splash-title {
-                font-size: 15px;
-                margin-bottom: 12px;
-            }
-
-            .splash-space {
-                margin: 12px auto;
-            }
-
-            .enter-btn {
-                margin-top: 18px;
-                margin-bottom: 8px;
-            }
-        }
-    </style>
+/* FOOTER */
+footer{padding:48px 5%;text-align:center;border-top:1px solid rgba(255,255,255,.08);color:#8b8478;background:#050505}
+.social{display:flex;justify-content:center;gap:22px;margin-bottom:14px;font-size:1.6rem}
+.social a{color:#a89f90;transition:color .2s}
+.social a:hover{color:var(--gold)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+  <symbol id="list" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></symbol>
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21l-1.5-1.3C5.4 15.1 2 12 2 8.5 2 5.4 4.4 3 7.5 3c1.700 0 3.400.8 4.500 2.100C13.100 3.800 14.800 3 16.500 3 19.600 3 22 5.400 22 8.500c0 3.500-3.400 6.600-8.500 11.200z"/></symbol>
+  <symbol id="yt" viewBox="0 0 24 24"><path d="M21.600 7.200a2.500 2.500 0 00-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 002.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 001.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 001.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800zM10 15V9l5.200 3z"/></symbol>
+  <symbol id="mail" viewBox="0 0 24 24"><path d="M3 5h18a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1zm9 7.200L4.500 7v1.700l7.500 5.100 7.500-5.100V7z"/></symbol>
+</svg>
 
-    <nav id="navbar">
-        <a href="#" class="logo">
-            <img src="https://i.ibb.co/8Dc8YzcV/9638-Photoroom.png" alt="Logo">
-        </a>
-        <a href="https://tripplencj.online/donate" class="nav-donate-btn" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-heart"></i> โดเนท
-        </a>
-    </nav>
+<nav id="navbar">
+  <a href="#" class="logo" aria-label="TrippleNCJ Studio"><img src="https://i.ibb.co/8Dc8YzcV/9638-Photoroom.png" alt="TrippleNCJ Studio" height="44"></a>
+  <a href="https://tripplencj.online/donate" class="donate" target="_blank" rel="noopener noreferrer"><svg class="i"><use href="#heart"/></svg> โดเนท</a>
+</nav>
 
-    <header class="hero">
-        <div class="hero-content">
-            <p class="hero-tag"><i class="fas fa-play-circle"></i> TRIPPLENCJ ORIGINAL</p>
-            <h1>BREAKPOINT</h1>
-            <p style="margin-bottom: 25px; color: var(--text-muted); font-size: 1.1rem;">
-                ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง <br>ร่วมค้นหาความจริงที่ถูกซ่อนไว้ภายใต้คำลวง
-            </p>
-            <button class="btn-play" onclick="playVideo(0)">
-                <i class="fas fa-play"></i> รับชมตอนล่าสุด
-            </button>
-        </div>
-    </header>
-
-    <main class="section">
-        <h2 class="section-title">Breakpoint: ทุกตอน</h2>
-        <div class="season-selector" id="seasonSelector"></div>
-        <div class="episodes-list" id="episodeList"></div>
-    </main>
-
-    <footer>
-        <div class="social">
-            <a href="https://youtube.com/@TrippleNCJ" target="_blank"><i class="fab fa-youtube"></i></a>
-            <a href="mailto:tripplencj@gmail.com"><i class="fas fa-envelope"></i></a>
-        </div>
-        <p>© 2026 TRIPPLENCJ STUDIO. All Rights Reserved.</p>
-    </footer>
-
-    <div class="player-overlay" id="playerOverlay">
-        <div class="player-box">
-            <button class="close-btn" onclick="closePlayer()">✕</button>
-            <div id="videoFrame"></div>
-            <div class="video-details">
-                <h2 id="vTitle"></h2>
-                <div class="video-meta-row">
-                    <span id="vEp" style="color:var(--accent-10); font-weight:600;"></span>
-                    <span id="vDur"></span>
-                    <span class="rate-badge" id="vRate"></span>
-                </div>
-                <p id="vDesc" style="color: var(--text-main);"></p>
-                <div class="credits-box">
-                    🎬 ทีมงานสร้างสรรค์: <span id="vCredits"></span>
-                </div>
-            </div>
-        </div>
+<header class="hero">
+  <div class="hero-content">
+    <p class="hero-tag"><svg class="i"><use href="#play"/></svg> TRIPPLENCJ ORIGINAL</p>
+    <h1>BREAKPOINT</h1>
+    <p class="lead">ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง ร่วมค้นหาความจริงที่ถูกซ่อนไว้ภายใต้คำลวง</p>
+    <div class="btns">
+      <button class="btn btn-play" id="latestBtn"><svg class="i"><use href="#play"/></svg> รับชมตอนล่าสุด</button>
+      <button class="btn btn-info" id="pickBtn"><svg class="i"><use href="#list"/></svg> เลือกตอน</button>
     </div>
+  </div>
+</header>
 
-    <script>
+<main class="section">
+  <h2 class="section-title">ซีรีส์ทั้งหมด</h2>
+  <div class="posters" id="posters"></div>
+</main>
 
-        
+<footer>
+  <div class="social">
+    <a href="https://youtube.com/@TrippleNCJ" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="i"><use href="#yt"/></svg></a>
+    <a href="mailto:tripplencj@gmail.com" aria-label="อีเมล"><svg class="i"><use href="#mail"/></svg></a>
+  </div>
+  <p>© 2026 TRIPPLENCJ STUDIO. All Rights Reserved.</p>
+</footer>
 
-        const driveBase = "https://drive.google.com/file/d/";
+<dialog id="popup" aria-labelledby="pTitle">
+  <button class="close" id="closeBtn" aria-label="ปิด">✕</button>
+  <div class="stage" id="stage"></div>
+  <div class="body">
+    <div class="now" id="now" hidden>
+      <h2 id="vTitle"></h2>
+      <div class="meta-row"><span class="ep" id="vEp"></span><span id="vDur"></span><span class="badge" id="vRate"></span></div>
+      <p id="vDesc"></p>
+    </div>
+    <p class="credits">ทีมงานสร้างสรรค์: <span id="vCredits"></span></p>
+    <div class="list-head"><h3>เลือกตอน</h3><div class="seasons" id="seasons"></div></div>
+    <div class="episodes" id="episodes"></div>
+  </div>
+</dialog>
 
-        const episodes = [
-            {
-                id: "uOlQF24CTXY", season: 1, ep: "EP.1", title: "จุดเริ่มต้น",
-                dur: "2 นาที 49 วินาที", rate: "13+",
-                driveId: "1M1cL2hv8oIWLR1ZdHWTXgIsMI4NYX4kY",
-                videoUrl: driveBase + "1M1cL2hv8oIWLR1ZdHWTXgIsMI4NYX4kY/preview?usp=sharing",
-                poster: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
-                desc: "ซีรีส์สืบสวนลึกลับสุดเข้มข้นที่เต็มไปด้วยปริศนาและความจริงที่ไม่มีใครคาดคิด",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            {
-                id: "WrFwGxEqB3M", season: 1, ep: "EP.2", title: "ความจริงเริ่มเผย",
-                dur: "2 นาที 48 วินาที", rate: "13+",
-                driveId: "1tXGhOxXgfQvgZ-jDB-eBHi5exSBEk1Bc",
-                videoUrl: driveBase + "1tXGhOxXgfQvgZ-jDB-eBHi5exSBEk1Bc/preview?usp=sharing",
-                poster: "https://img.youtube.com/vi/WrFwGxEqB3M/maxresdefault.jpg",
-                desc: "เมื่อทวีสันต์เริ่มเปิดโรงงาน และรับสมัครงาน ท่ามกลางสายตาที่จับจ้อง",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            {
-                id: "wXiwxUFf1aU", season: 1, ep: "EP.3", title: "อดีตที่ถูกซ่อน",
-                dur: "3 นาที 22 วินาที", rate: "13+",
-                driveId: "1QSghpbLTKyA4dYDtRCRPGU9bW7Df0mbT",
-                videoUrl: driveBase + "1QSghpbLTKyA4dYDtRCRPGU9bW7Df0mbT/preview?usp=sharing",
-                poster: "https://img.youtube.com/vi/wXiwxUFf1aU/maxresdefault.jpg",
-                desc: "ทวีสันต์โดนภัทรนนท์หักหลัง ความเชื่อใจที่เคยมีเริ่มพังทลาย",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            {
-                id: "jd4Ia9OtpNs", season: 1, ep: "EP.3.5", title: "ตอนพิเศษ",
-                dur: "2 นาที 30 วินาที", rate: "13+",
-                driveId: "1aTSr6A76VQRE_aCqNTdwnT6XaiIm7uWA",
-                videoUrl: driveBase + "1aTSr6A76VQRE_aCqNTdwnT6XaiIm7uWA/preview?usp=sharing",
-                poster: "https://img.youtube.com/vi/jd4Ia9OtpNs/maxresdefault.jpg",
-                desc: "เบื้องหลังและมุมมองอีกด้านที่ความจริงอาจไม่ได้มีเพียงด้านเดียว",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            {
-                id: "ZUU6_Heef8s", season: 1, ep: "EP.4", title: "จุดแตกหัก",
-                dur: "2 นาที 50 วินาที", rate: "13+",
-                driveId: "1KUG1p_iyLd57gBE4h44fpMKn2Qia5sqU",
-                videoUrl: driveBase + "1KUG1p_iyLd57gBE4h44fpMKn2Qia5sqU/preview?usp=sharing",
-                poster: "https://img.youtube.com/vi/ZUU6_Heef8s/maxresdefault.jpg",
-                desc: "ทุกคนเริ่มไม่ไว้ใจกัน บรรยากาศแห่งความหวาดระแวงเข้าปกคลุม",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            {
-                id: "uOlQF24CTXY", season: 1, ep: "EP.5", title: "ตอนที่ 5",
-                dur: "3 นาที 23 วินาที", rate: "13+",
-                driveId: "1x_oCOGmxQXn53Hn_f2SEov9rRf4pd3_r",
-                videoUrl: driveBase + "1x_oCOGmxQXn53Hn_f2SEov9rRf4pd3_r/preview?usp=sharing",
-                poster: "https://i.ytimg.com/vi/AB5CFw8a8Wo/hqdefault.jpg?sqp=-oaymwEmCKgBEF5IWvKriqkDGQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAE=&rs=AOn4CLAMbGUfJhsRhgPdAm5b7f5RO4UbsQ",
-                desc: "ทวีสันต์ไม่มีทางไปต่อ",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            {
-                id: "uOlQF24CTXY", season: 1, ep: "EP.6", title: "ตอนที่ 6",
-                dur: "4 นาที 29 วินาที", rate: "13+",
-                driveId: "1Dw2sSX2bwdQ1yJcB1DsyImvlSD-p2K3l",
-                videoUrl: driveBase + "1Dw2sSX2bwdQ1yJcB1DsyImvlSD-p2K3l/preview?usp=sharing",
-                poster: "https://i.ytimg.com/vi/XI034mQajes/hqdefault.jpg?sqp=-oaymwEmCKgBEF5IWvKriqkDGQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAE=&rs=AOn4CLDewN_YsoiZuijajLI-x6z0HANRag",
-                desc: "ทวีสันต์ถูกรักพาตัว",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            {
-                id: "uOlQF24CTXY", season: 1, ep: "EP.7", title: "ตอนที่ 7",
-                dur: "5 นาที 57 วินาที", rate: "13+",
-                driveId: "1fDn1dq-QPFeQOKaKyZpHa1xO2iPflRrO",
-                videoUrl: driveBase + "1fDn1dq-QPFeQOKaKyZpHa1xO2iPflRrO/preview?usp=sharing",
-                poster: "https://i.ytimg.com/vi/ic_CyQXVC2U/hqdefault.jpg?sqp=-oaymwEmCKgBEF5IWvKriqkDGQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAE=&rs=AOn4CLADzctQZJMo0rfH4r8WwKE5cAuhdw",
-                desc: "ทวีสันต์รับสมัครพนักงานเพิ่ม",
-                credits: "Nikonpan, Nasa and Newtun"
-            },
-            {
-                id: "uOlQF24CTXY", season: 1, ep: "EP.8", title: "ตอนที่ 8",
-                dur: "6 นาที 17 วินาที", rate: "13+",
-                driveId: "1D8eyfB3-ZhmmPOQud8qLybTuWcGDvBgZ",
-                videoUrl: driveBase + "1D8eyfB3-ZhmmPOQud8qLybTuWcGDvBgZ/preview?usp=sharing",
-                poster: "videoframe_361773.png",
-                desc: "เคนขึ้นมารับหน้าที่แทนคณิต",
-                credits: "Nikonpan, Nasa and Newtun"
-            }
-        ];
+<script>
+const CREDITS = "Nikonpan, Nasa and Newtun";
+const RATE = "13+";
+const yt = id => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
-        let currentSeason = 1;
+/* เพิ่มซีรีส์ใหม่: copy ก้อนนี้ไปต่อท้ายใน shows
+   poster = รูปโปสเตอร์แนวตั้ง 2:3 (เช่น "poster-breakpoint.jpg") */
+const shows = [{
+  id: "breakpoint",
+  title: "Breakpoint",
+  desc: "ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง",
+  poster: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
+  banner: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
+  episodes: [
+    {season:1, ep:"EP.1",   title:"จุดเริ่มต้น",      dur:"2 นาที 49 วินาที", drive:"1M1cL2hv8oIWLR1ZdHWTXgIsMI4NYX4kY", poster:yt("uOlQF24CTXY"), desc:"ซีรีส์สืบสวนลึกลับสุดเข้มข้นที่เต็มไปด้วยปริศนาและความจริงที่ไม่มีใครคาดคิด"},
+    {season:1, ep:"EP.2",   title:"ความจริงเริ่มเผย", dur:"2 นาที 48 วินาที", drive:"1tXGhOxXgfQvgZ-jDB-eBHi5exSBEk1Bc", poster:yt("WrFwGxEqB3M"), desc:"เมื่อทวีสันต์เริ่มเปิดโรงงาน และรับสมัครงาน ท่ามกลางสายตาที่จับจ้อง"},
+    {season:1, ep:"EP.3",   title:"อดีตที่ถูกซ่อน",   dur:"3 นาที 22 วินาที", drive:"1QSghpbLTKyA4dYDtRCRPGU9bW7Df0mbT", poster:yt("wXiwxUFf1aU"), desc:"ทวีสันต์โดนภัทรนนท์หักหลัง ความเชื่อใจที่เคยมีเริ่มพังทลาย"},
+    {season:1, ep:"EP.3.5", title:"ตอนพิเศษ",         dur:"2 นาที 30 วินาที", drive:"1aTSr6A76VQRE_aCqNTdwnT6XaiIm7uWA", poster:yt("jd4Ia9OtpNs"), desc:"เบื้องหลังและมุมมองอีกด้านที่ความจริงอาจไม่ได้มีเพียงด้านเดียว"},
+    {season:1, ep:"EP.4",   title:"จุดแตกหัก",        dur:"2 นาที 50 วินาที", drive:"1KUG1p_iyLd57gBE4h44fpMKn2Qia5sqU", poster:yt("ZUU6_Heef8s"), desc:"ทุกคนเริ่มไม่ไว้ใจกัน บรรยากาศแห่งความหวาดระแวงเข้าปกคลุม"},
+    {season:1, ep:"EP.5",   title:"ตอนที่ 5",         dur:"3 นาที 23 วินาที", drive:"1x_oCOGmxQXn53Hn_f2SEov9rRf4pd3_r", poster:yt("AB5CFw8a8Wo"), desc:"ทวีสันต์ไม่มีทางไปต่อ"},
+    {season:1, ep:"EP.6",   title:"ตอนที่ 6",         dur:"4 นาที 29 วินาที", drive:"1Dw2sSX2bwdQ1yJcB1DsyImvlSD-p2K3l", poster:yt("XI034mQajes"), desc:"ทวีสันต์ถูกรักพาตัว"},
+    {season:1, ep:"EP.7",   title:"ตอนที่ 7",         dur:"5 นาที 57 วินาที", drive:"1fDn1dq-QPFeQOKaKyZpHa1xO2iPflRrO", poster:yt("ic_CyQXVC2U"), desc:"ทวีสันต์รับสมัครพนักงานเพิ่ม"},
+    {season:1, ep:"EP.8",   title:"ตอนที่ 8",         dur:"6 นาที 17 วินาที", drive:"1D8eyfB3-ZhmmPOQud8qLybTuWcGDvBgZ", poster:"videoframe_361773.png", desc:"เคนขึ้นมารับหน้าที่แทนคณิต"}
+  ]
+}];
 
-        // Initialize season selector
-        const seasons = [...new Set(episodes.map(ep => ep.season))].sort();
-        const seasonSelector = document.getElementById('seasonSelector');
-        seasons.forEach(season => {
-            const btn = document.createElement('button');
-            btn.className = 'season-btn' + (season === 1 ? ' active' : '');
-            btn.innerText = `Season ${season}`;
-            btn.onclick = () => switchSeason(season);
-            seasonSelector.appendChild(btn);
-        });
+const $ = id => document.getElementById(id);
+const popup = $("popup");
+let show = shows[0], season = 1, playing = -1;
 
-        function switchSeason(season) {
-            currentSeason = season;
-            // Update active button
-            document.querySelectorAll('.season-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            // Render episodes for selected season
-            renderEpisodes(season);
-        }
+/* Poster grid */
+$("posters").innerHTML = shows.map((s, i) => `
+  <button class="poster" data-i="${i}" aria-label="${s.title} เลือกตอน">
+    <img src="${s.poster}" alt="" loading="lazy">
+    <span class="poster-info"><b>${s.title}</b><small>${s.episodes.length} ตอน</small></span>
+  </button>`).join("");
+$("posters").addEventListener("click", e => {
+  const b = e.target.closest(".poster");
+  if (b) openShow(+b.dataset.i);
+});
 
-        function renderEpisodes(season) {
-            const container = document.getElementById('episodeList');
-            container.innerHTML = '';
-            const seasonEpisodes = episodes.filter(ep => ep.season === season);
-            seasonEpisodes.forEach((item, index) => {
-                const actualIndex = episodes.indexOf(item);
-                container.innerHTML += `
-                    <div class="ep-row" onclick="playVideo(${actualIndex})">
-                        <img src="${item.poster}" alt="${item.ep}" class="ep-thumbnail">
-                        <div class="ep-details">
-                            <h3>${item.ep}: ${item.title}</h3>
-                            <p>${item.desc}</p>
-                        </div>
-                        <div class="ep-meta-info">
-                            <span><i class="far fa-clock"></i> ${item.dur}</span>
-                            <span class="rate-badge">${item.rate}</span>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+/* Popup */
+function openShow(i, epIndex = -1) {
+  show = shows[i];
+  const seasons = [...new Set(show.episodes.map(e => e.season))].sort((a, b) => a - b);
+  $("seasons").innerHTML = seasons.map(s => `<button class="season-btn" data-s="${s}">Season ${s}</button>`).join("");
+  $("vCredits").textContent = CREDITS;
+  season = seasons[0];
+  playing = -1;
+  showBanner();
+  renderEpisodes();
+  if (!popup.open) popup.showModal();
+  document.body.style.overflow = "hidden";
+  popup.scrollTop = 0;
+  if (epIndex >= 0) play(epIndex);
+}
+function showBanner() {
+  $("stage").className = "stage";
+  $("stage").innerHTML = `<img src="${show.banner}" alt=""><div class="stage-text"><h2 id="pTitle">${show.title}</h2><p>${show.desc}</p></div>`;
+  $("now").hidden = true;
+}
+function renderEpisodes() {
+  document.querySelectorAll(".season-btn").forEach(b => b.setAttribute("aria-pressed", +b.dataset.s === season));
+  $("episodes").innerHTML = show.episodes.map((e, i) => e.season !== season ? "" : `
+    <button class="ep-row" data-i="${i}" aria-current="${i === playing}">
+      <img src="${e.poster}" alt="" width="112" height="63" loading="lazy">
+      <div><h4>${e.ep}: ${e.title}</h4><p>${e.desc}</p></div>
+      <span class="ep-dur">${e.dur}</span>
+    </button>`).join("");
+}
+function play(i) {
+  const e = show.episodes[i];
+  playing = i;
+  season = e.season;
+  $("stage").className = "stage playing";
+  $("stage").innerHTML = `<iframe src="https://drive.google.com/file/d/${e.drive}/preview" title="${show.title} ${e.ep}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  $("vTitle").textContent = `${show.title}: ${e.title}`;
+  $("vEp").textContent = e.ep;
+  $("vDur").textContent = e.dur;
+  $("vRate").textContent = RATE;
+  $("vDesc").textContent = e.desc;
+  $("now").hidden = false;
+  renderEpisodes();
+  popup.scrollTo({top: 0, behavior: "smooth"});
+}
+$("episodes").addEventListener("click", e => {
+  const r = e.target.closest(".ep-row");
+  if (r) play(+r.dataset.i);
+});
+$("seasons").addEventListener("click", e => {
+  const b = e.target.closest(".season-btn");
+  if (b) { season = +b.dataset.s; renderEpisodes(); }
+});
 
-        // Initial render
-        renderEpisodes(1);
+$("latestBtn").onclick = () => openShow(0, shows[0].episodes.length - 1);
+$("pickBtn").onclick = () => openShow(0);
+$("closeBtn").onclick = () => popup.close();
+popup.addEventListener("click", e => { if (e.target === popup) popup.close(); });
+popup.addEventListener("close", () => {
+  $("stage").innerHTML = "";
+  document.body.style.overflow = "";
+});
 
-        function playVideo(index) {
-            const data = episodes[index];
-            const overlay = document.getElementById('playerOverlay');
-            document.getElementById('videoFrame').innerHTML = `
-                <iframe src="${data.videoUrl}" allow="autoplay; encrypted-media" allowfullscreen
-                    style="width:100%; aspect-ratio:16/9; border:none; background:#000;"></iframe>
-            `;
-            document.getElementById('vTitle').innerText = `Breakpoint: ${data.title}`;
-            document.getElementById('vEp').innerText = data.ep;
-            document.getElementById('vDur').innerText = data.dur;
-            document.getElementById('vRate').innerText = data.rate;
-            document.getElementById('vDesc').innerText = data.desc;
-            document.getElementById('vCredits').innerText = data.credits;
-            
-            overlay.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closePlayer() {
-            document.getElementById('playerOverlay').style.display = 'none';
-            document.getElementById('videoFrame').innerHTML = '';
-            document.body.style.overflow = 'auto';
-        }
-
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            window.scrollY > 50 ? nav.classList.add('scrolled') : nav.classList.remove('scrolled');
-        });
-    </script>
+const nav = $("navbar");
+addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 50), {passive: true});
+</script>
 </body>
 </html>
