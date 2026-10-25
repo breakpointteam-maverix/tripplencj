@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>เกมบี้มดและซีรีส์ Breakpoint | TrippleNCJ Studio</title>
+<meta name="description" content="เกมบี้มดเล่นฟรีบนเว็บ พร้อมซีรีส์ Breakpoint จาก TrippleNCJ Studio">
+<meta name="theme-color" content="#080808">
+<meta property="og:title" content="เกมบี้มดและซีรีส์ Breakpoint | TrippleNCJ Studio">
+<meta property="og:description" content="ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง">
+<meta property="og:image" content="https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--card:#171717;--gold:#c9a35b;--gold-light:#e7c97b;--text:#f1ebde;--muted:#c5baa9;--line:rgba(201,163,91,.18)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Kanit',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+svg.i{width:1em;height:1em;fill:currentColor;vertical-align:-.125em}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold-light);outline-offset:3px}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;height:72px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;z-index:100;background:linear-gradient(rgba(8,8,8,.9),transparent);transition:background .3s,height .3s}
+nav.scrolled{background:var(--bg);height:62px;border-bottom:1px solid var(--line)}
+.logo img{height:44px;width:auto;display:block}
+.donate{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#111;text-decoration:none;font-weight:600;transition:transform .2s}
+.donate:hover{transform:translateY(-2px)}
+
+/* HERO */
+.hero{min-height:80vh;min-height:80svh;display:flex;align-items:center;padding:100px 5% 60px;background:radial-gradient(circle at 75% 40%,rgba(201,163,91,.22),transparent 55%),linear-gradient(to top,var(--bg),transparent 25%),#0d0a05}
+.hero-content{max-width:640px}
+.hero-tag{color:var(--gold);font-weight:600;margin-bottom:8px}
+.hero h1{font-size:clamp(2.8rem,9vw,5rem);line-height:1.1;margin-bottom:18px}
+.lead{color:var(--muted);font-size:1.1rem;margin-bottom:28px;max-width:34em}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 28px;border:0;border-radius:6px;font-weight:600;font-size:1.05rem;cursor:pointer;transition:background .2s,transform .2s}
+.btn:hover{transform:scale(1.04)}
+.btn-play{background:var(--text);color:#000}
+.btn-play:hover{background:var(--gold)}
+.btn-info{background:rgba(109,109,110,.55);color:var(--text)}
+.btn-info:hover{background:rgba(109,109,110,.8)}
+
+/* POSTERS */
+.section{padding:40px 5% 64px;max-width:1200px;margin:0 auto}
+.section-title{font-size:1.5rem;margin-bottom:20px;border-left:4px solid var(--gold);padding-left:14px}
+.posters{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,200px));gap:18px}
+.poster{position:relative;aspect-ratio:2/3;border:0;border-radius:8px;overflow:hidden;cursor:pointer;background:var(--card);text-align:left;transition:transform .25s,box-shadow .25s}
+.poster:hover{transform:scale(1.05);box-shadow:0 10px 30px rgba(0,0,0,.7),0 0 0 2px var(--gold);z-index:2}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.poster::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.92) 5%,transparent 55%)}
+.poster-info{position:absolute;left:12px;right:12px;bottom:12px;z-index:1}
+.poster-info b{display:block;font-size:1.15rem;line-height:1.2}
+.poster-info small{color:var(--muted)}
+
+/* POPUP */
+dialog{width:min(900px,calc(100% - 24px));max-height:calc(100dvh - 24px);margin:auto;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:12px;overflow:auto;padding:0}
+dialog::backdrop{background:rgba(0,0,0,.88);backdrop-filter:blur(4px)}
+.close{position:absolute;right:10px;top:10px;z-index:5;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(15,15,15,.9);font-size:1.1rem;cursor:pointer}
+.close:hover{background:var(--gold);color:#000}
+.stage{position:relative;aspect-ratio:16/9;background:#000}
+.stage img,.stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
+.stage::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--card),transparent 55%);pointer-events:none}
+.stage.playing::after{display:none}
+.stage-text{position:absolute;left:24px;right:24px;bottom:16px;z-index:2}
+.stage.playing .stage-text{display:none}
+.stage-text h2{font-size:clamp(1.6rem,5vw,2.4rem);line-height:1.15}
+.body{padding:8px 24px 28px}
+.now{margin:12px 0 4px}
+.now .ep{color:var(--gold);font-weight:600}
+.meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;color:var(--muted);font-size:.92rem;margin-bottom:8px}
+.badge{border:1px solid #555;padding:1px 8px;border-radius:3px;color:var(--text);font-size:.8rem}
+.credits{color:var(--muted);font-size:.88rem;margin:6px 0 18px}
+.credits span{color:var(--text)}
+.list-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px}
+.list-head h3{font-size:1.2rem}
+.seasons{display:flex;gap:8px;flex-wrap:wrap}
+.season-btn{padding:5px 14px;background:transparent;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.season-btn[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#000}
+.episodes{display:grid;gap:10px}
+.ep-row{display:grid;grid-template-columns:112px 1fr auto;gap:14px;align-items:center;width:100%;text-align:left;background:#101010;padding:10px;border:1px solid transparent;border-radius:8px;cursor:pointer;transition:background .2s,border-color .2s}
+.ep-row:hover{background:rgba(201,163,91,.08);border-color:rgba(201,163,91,.35)}
+.ep-row[aria-current="true"]{border-color:var(--gold);background:rgba(201,163,91,.12)}
+.ep-row img{width:112px;aspect-ratio:16/9;object-fit:cover;border-radius:4px;background:#000}
+.ep-row h4{font-size:1rem;font-weight:600}
+.ep-row p{font-size:.85rem;color:var(--muted)}
+.ep-dur{font-size:.85rem;color:var(--muted);white-space:nowrap}
+@media(max-width:620px){
+  .ep-row{grid-template-columns:88px 1fr;gap:10px}
+  .ep-row img{width:88px}
+  .ep-dur{display:none}
+  .body{padding:4px 16px 22px}
+}
+
+/* GAME TESTER */
+.game-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 62px 10px 20px;font-weight:600}
+.game-wrap{position:relative}
+#gCanvas{display:block;width:100%;height:min(60dvh,460px);touch-action:none;cursor:crosshair;background:#1b1409}
+#gStart{position:absolute;inset:0;margin:auto;width:max-content;height:max-content;text-align:center}
+#gStart[hidden]{display:none}
+.game-note{padding:12px 20px;color:var(--muted);font-size:.85rem}
+.game-note a{color:var(--gold)}
+
+/* FOOTER */
+footer{padding:48px 5%;text-align:center;border-top:1px solid rgba(255,255,255,.08);color:#8b8478;background:#050505}
+.social{display:flex;justify-content:center;gap:22px;margin-bottom:14px;font-size:1.6rem}
+.social a{color:#a89f90;transition:color .2s}
+.social a:hover{color:var(--gold)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+  <symbol id="list" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></symbol>
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 21l-1.5-1.3C5.4 15.1 2 12 2 8.5 2 5.4 4.4 3 7.5 3c1.700 0 3.400.8 4.500 2.100C13.100 3.800 14.800 3 16.500 3 19.600 3 22 5.400 22 8.500c0 3.500-3.400 6.600-8.500 11.200z"/></symbol>
+  <symbol id="yt" viewBox="0 0 24 24"><path d="M21.600 7.200a2.500 2.500 0 00-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 002.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 001.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 001.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800zM10 15V9l5.200 3z"/></symbol>
+  <symbol id="mail" viewBox="0 0 24 24"><path d="M3 5h18a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1zm9 7.200L4.500 7v1.700l7.500 5.100 7.500-5.100V7z"/></symbol>
+</svg>
+
+<nav id="navbar">
+  <a href="#" class="logo" aria-label="TrippleNCJ Studio"><img src="https://i.ibb.co/8Dc8YzcV/9638-Photoroom.png" alt="TrippleNCJ Studio" height="44"></a>
+  <a href="https://tripplencj.online/donate" class="donate" target="_blank" rel="noopener noreferrer"><svg class="i"><use href="#heart"/></svg> โดเนท</a>
+</nav>
+
+<header class="hero">
+  <div class="hero-content">
+    <p class="hero-tag"><svg class="i"><use href="#play"/></svg> TRIPPLENCJ GAME</p>
+    <h1>เกมบี้มด</h1>
+    <p class="lead">แตะมดให้ได้มากที่สุดก่อนหมดเวลา เลือกระดับความยากได้ เล่นฟรีบนเว็บ</p>
+    <div class="btns">
+      <button class="btn btn-play" id="playGameBtn"><svg class="i"><use href="#play"/></svg> เล่นเกม</button>
+    </div>
+  </div>
+</header>
+
+<main class="section">
+  <h2 class="section-title">ซีรีส์ทั้งหมด</h2>
+  <div class="posters" id="posters"></div>
+</main>
+
+<footer>
+  <div class="social">
+    <a href="https://youtube.com/@TrippleNCJ" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="i"><use href="#yt"/></svg></a>
+    <a href="mailto:tripplencj@gmail.com" aria-label="อีเมล"><svg class="i"><use href="#mail"/></svg></a>
+  </div>
+  <p>© 2026 TRIPPLENCJ STUDIO. All Rights Reserved.</p>
+</footer>
+
+<dialog id="popup" aria-labelledby="pTitle">
+  <button class="close" id="closeBtn" aria-label="ปิด">✕</button>
+  <div class="stage" id="stage"></div>
+  <div class="body">
+    <div class="now" id="now" hidden>
+      <h2 id="vTitle"></h2>
+      <div class="meta-row"><span class="ep" id="vEp"></span><span id="vDur"></span><span class="badge" id="vRate"></span></div>
+      <p id="vDesc"></p>
+    </div>
+    <p class="credits">ทีมงานสร้างสรรค์: <span id="vCredits"></span></p>
+    <div class="list-head"><h3>เลือกตอน</h3><div class="seasons" id="seasons"></div></div>
+    <div class="episodes" id="episodes"></div>
+  </div>
+</dialog>
+
+<dialog id="gameDlg" aria-label="เกมบี้มด">
+  <button class="close" id="gameClose" aria-label="ปิด">✕</button>
+  <div class="game-bar">
+    <span id="gScore">คะแนน 0</span><span id="gTime">เวลา 0</span>
+    <div class="seasons" id="gModes">
+      <button class="season-btn" data-m="easy" aria-pressed="true">ง่าย</button>
+      <button class="season-btn" data-m="normal" aria-pressed="false">ปกติ</button>
+      <button class="season-btn" data-m="hard" aria-pressed="false">ยาก</button>
+    </div>
+  </div>
+  <div class="game-wrap">
+    <canvas id="gCanvas" aria-label="พื้นที่เล่นเกมบี้มด"></canvas>
+    <button class="btn btn-play" id="gStart">เริ่มเล่น</button>
+  </div>
+  <p class="game-note">แตะหรือคลิกที่มดเพื่อบี้ให้ได้มากที่สุดก่อนหมดเวลา · เลือกระดับความยากได้ด้านบน</p>
+</dialog>
+
+<script>
+const CREDITS = "Nikonpan, Nasa and Newtun";
+const RATE = "13+";
+const yt = id => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+
+/* เพิ่มซีรีส์ใหม่: copy ก้อนนี้ไปต่อท้ายใน shows
+   poster = รูปโปสเตอร์แนวตั้ง 2:3 (เช่น "poster-breakpoint.jpg") */
+const shows = [{
+  id: "breakpoint",
+  title: "Breakpoint",
+  desc: "ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง",
+  poster: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
+  banner: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
+  trailer: "DhzPvYVh7n8", /* YouTube ID ของตัวอย่าง */
+  episodes: [
+    {season:1, ep:"EP.1",   title:"จุดเริ่มต้น",      dur:"2 นาที 49 วินาที", drive:"1M1cL2hv8oIWLR1ZdHWTXgIsMI4NYX4kY", poster:yt("uOlQF24CTXY"), desc:"ซีรีส์สืบสวนลึกลับสุดเข้มข้นที่เต็มไปด้วยปริศนาและความจริงที่ไม่มีใครคาดคิด"},
+    {season:1, ep:"EP.2",   title:"ความจริงเริ่มเผย", dur:"2 นาที 48 วินาที", drive:"1tXGhOxXgfQvgZ-jDB-eBHi5exSBEk1Bc", poster:yt("WrFwGxEqB3M"), desc:"เมื่อทวีสันต์เริ่มเปิดโรงงาน และรับสมัครงาน ท่ามกลางสายตาที่จับจ้อง"},
+    {season:1, ep:"EP.3",   title:"อดีตที่ถูกซ่อน",   dur:"3 นาที 22 วินาที", drive:"1QSghpbLTKyA4dYDtRCRPGU9bW7Df0mbT", poster:yt("wXiwxUFf1aU"), desc:"ทวีสันต์โดนภัทรนนท์หักหลัง ความเชื่อใจที่เคยมีเริ่มพังทลาย"},
+    {season:1, ep:"EP.3.5", title:"ตอนพิเศษ",         dur:"2 นาที 30 วินาที", drive:"1aTSr6A76VQRE_aCqNTdwnT6XaiIm7uWA", poster:yt("jd4Ia9OtpNs"), desc:"เบื้องหลังและมุมมองอีกด้านที่ความจริงอาจไม่ได้มีเพียงด้านเดียว"},
+    {season:1, ep:"EP.4",   title:"จุดแตกหัก",        dur:"2 นาที 50 วินาที", drive:"1KUG1p_iyLd57gBE4h44fpMKn2Qia5sqU", poster:yt("ZUU6_Heef8s"), desc:"ทุกคนเริ่มไม่ไว้ใจกัน บรรยากาศแห่งความหวาดระแวงเข้าปกคลุม"},
+    {season:1, ep:"EP.5",   title:"ตอนที่ 5",         dur:"3 นาที 23 วินาที", drive:"1x_oCOGmxQXn53Hn_f2SEov9rRf4pd3_r", poster:yt("AB5CFw8a8Wo"), desc:"ทวีสันต์ไม่มีทางไปต่อ"},
+    {season:1, ep:"EP.6",   title:"ตอนที่ 6",         dur:"4 นาที 29 วินาที", drive:"1Dw2sSX2bwdQ1yJcB1DsyImvlSD-p2K3l", poster:yt("XI034mQajes"), desc:"ทวีสันต์ถูกรักพาตัว"},
+    {season:1, ep:"EP.7",   title:"ตอนที่ 7",         dur:"5 นาที 57 วินาที", drive:"1fDn1dq-QPFeQOKaKyZpHa1xO2iPflRrO", poster:yt("ic_CyQXVC2U"), desc:"ทวีสันต์รับสมัครพนักงานเพิ่ม"},
+    {season:1, ep:"EP.8",   title:"ตอนที่ 8",         dur:"6 นาที 17 วินาที", drive:"1D8eyfB3-ZhmmPOQud8qLybTuWcGDvBgZ", poster:"videoframe_361773.png", desc:"เคนขึ้นมารับหน้าที่แทนคณิต"}
+  ]
+}];
+
+const $ = id => document.getElementById(id);
+const popup = $("popup");
+let show = shows[0], season = 1, playing = -1;
+
+/* Poster grid */
+$("posters").innerHTML = shows.map((s, i) => `
+  <button class="poster" data-i="${i}" aria-label="${s.title} เลือกตอน">
+    <img src="${s.poster}" alt="" loading="lazy">
+    <span class="poster-info"><b>${s.title}</b><small>${s.episodes.length} ตอน</small></span>
+  </button>`).join("");
+$("posters").addEventListener("click", e => {
+  const b = e.target.closest(".poster");
+  if (b) openShow(+b.dataset.i);
+});
+
+/* Popup */
+function openShow(i, epIndex = -1) {
+  show = shows[i];
+  const seasons = [...new Set(show.episodes.map(e => e.season))].sort((a, b) => a - b);
+  $("seasons").innerHTML = seasons.map(s => `<button class="season-btn" data-s="${s}">Season ${s}</button>`).join("");
+  $("vCredits").textContent = CREDITS;
+  season = seasons[0];
+  playing = -1;
+  showBanner();
+  renderEpisodes();
+  if (!popup.open) popup.showModal();
+  document.body.style.overflow = "hidden";
+  popup.scrollTop = 0;
+  if (epIndex >= 0) play(epIndex);
+}
+function showBanner() {
+  $("stage").className = "stage";
+  $("stage").innerHTML = `<img src="${show.banner}" alt=""><div class="stage-text"><h2 id="pTitle">${show.title}</h2><p>${show.desc}</p><button class="btn btn-info trailer-btn" style="margin-top:12px"><svg class="i"><use href="#play"/></svg> ดูตัวอย่าง</button></div>`;
+  $("now").hidden = true;
+}
+function renderEpisodes() {
+  document.querySelectorAll(".season-btn").forEach(b => b.setAttribute("aria-pressed", +b.dataset.s === season));
+  $("episodes").innerHTML = show.episodes.map((e, i) => e.season !== season ? "" : `
+    <button class="ep-row" data-i="${i}" aria-current="${i === playing}">
+      <img src="${e.poster}" alt="" width="112" height="63" loading="lazy">
+      <div><h4>${e.ep}: ${e.title}</h4><p>${e.desc}</p></div>
+      <span class="ep-dur">${e.dur}</span>
+    </button>`).join("");
+}
+function play(i) {
+  const e = show.episodes[i];
+  playing = i;
+  season = e.season;
+  $("stage").className = "stage playing";
+  $("stage").innerHTML = `<iframe src="https://drive.google.com/file/d/${e.drive}/preview" title="${show.title} ${e.ep}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  $("vTitle").textContent = `${show.title}: ${e.title}`;
+  $("vEp").textContent = e.ep;
+  $("vDur").textContent = e.dur;
+  $("vRate").textContent = RATE;
+  $("vDesc").textContent = e.desc;
+  $("now").hidden = false;
+  renderEpisodes();
+  popup.scrollTo({top: 0, behavior: "smooth"});
+}
+$("episodes").addEventListener("click", e => {
+  const r = e.target.closest(".ep-row");
+  if (r) play(+r.dataset.i);
+});
+$("seasons").addEventListener("click", e => {
+  const b = e.target.closest(".season-btn");
+  if (b) { season = +b.dataset.s; renderEpisodes(); }
+});
+
+
+function playTrailer(i) {
+  openShow(i);
+  $("stage").className = "stage playing";
+  $("stage").innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${show.trailer}?autoplay=1&rel=0" title="ตัวอย่าง ${show.title}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  $("vTitle").textContent = `${show.title}: ตัวอย่าง`;
+  $("vEp").textContent = "Trailer";
+  $("vDur").textContent = "";
+  $("vRate").textContent = RATE;
+  $("vDesc").textContent = show.desc;
+  $("now").hidden = false;
+}
+$("stage").addEventListener("click", e => {
+  if (e.target.closest(".trailer-btn")) playTrailer(shows.indexOf(show));
+});
+$("closeBtn").onclick = () => popup.close();
+
+
+const MODES = {
+  easy:   {size: 30, speed: .8,  gap: 900, time: 45, max: 6},
+  normal: {size: 22, speed: 1.4, gap: 700, time: 40, max: 9},
+  hard:   {size: 15, speed: 2.2, gap: 500, time: 30, max: 12}
+};
+const cv = $("gCanvas"), cx = cv.getContext("2d");
+let mode = "easy", ants = [], splats = [], score = 0, running = false, raf = 0, lastSpawn = 0, endAt = 0;
+
+function fit() {
+  const r = cv.getBoundingClientRect();
+  cv.width = r.width; cv.height = r.height;
+}
+function stopGame() { running = false; cancelAnimationFrame(raf); }
+function resetGame() {
+  stopGame(); fit();
+  score = 0; ants = []; splats = [];
+  $("gScore").textContent = "คะแนน 0";
+  $("gTime").textContent = "เวลา " + MODES[mode].time;
+  $("gStart").hidden = false;
+  $("gStart").textContent = "เริ่มเล่น";
+  draw();
+}
+function startGame() {
+  stopGame(); fit();
+  score = 0; ants = []; splats = []; lastSpawn = 0;
+  $("gScore").textContent = "คะแนน 0";
+  $("gStart").hidden = true;
+  running = true;
+  endAt = performance.now() + MODES[mode].time * 1000;
+  raf = requestAnimationFrame(loop);
+}
+function spawn() {
+  const m = MODES[mode];
+  ants.push({x: Math.random() * cv.width, y: Math.random() * cv.height, dir: Math.random() * 6.28, v: m.speed * (.8 + Math.random() * .4), s: m.size, t: 0});
+}
+function loop(t) {
+  const m = MODES[mode];
+  $("gTime").textContent = "เวลา " + Math.max(0, Math.ceil((endAt - t) / 1000));
+  if (t - lastSpawn > m.gap && ants.length < m.max) { spawn(); lastSpawn = t; }
+  ants.forEach(a => {
+    a.dir += (Math.random() - .5) * .12;
+    a.x += Math.sin(a.dir) * a.v;
+    a.y -= Math.cos(a.dir) * a.v;
+    if (a.x < 0 || a.x > cv.width) a.dir = -a.dir;
+    if (a.y < 0 || a.y > cv.height) a.dir = Math.PI - a.dir;
+    a.x = Math.min(cv.width, Math.max(0, a.x));
+    a.y = Math.min(cv.height, Math.max(0, a.y));
+  });
+  draw();
+  if (t >= endAt) {
+    running = false;
+    $("gStart").hidden = false;
+    $("gStart").textContent = `หมดเวลา! บี้ได้ ${score} ตัว · เล่นอีกครั้ง`;
+    return;
+  }
+  raf = requestAnimationFrame(loop);
+}
+function drawAnt(a) {
+  const s = a.s;
+  a.t += a.v;
+  cx.save();
+  cx.translate(a.x, a.y);
+  cx.rotate(a.dir);
+  cx.strokeStyle = "#d9c9a8";
+  cx.lineWidth = Math.max(1.5, s / 10);
+  [-.35, 0, .35].forEach((o, i) => {
+    const w = Math.sin(a.t / 4 + i * 2) * s * .25;
+    cx.beginPath();
+    cx.moveTo(-s * .8, o * s + w);
+    cx.lineTo(s * .8, o * s - w);
+    cx.stroke();
+  });
+  cx.fillStyle = "#c9a35b";
+  [[-.8, .3, .3], [0, .35, .4], [.85, .45, .55]].forEach(([y, rx, ry]) => {
+    cx.beginPath();
+    cx.ellipse(0, y * s, rx * s, ry * s, 0, 0, 7);
+    cx.fill();
+  });
+  cx.restore();
+}
+function draw() {
+  cx.fillStyle = "#1b1409";
+  cx.fillRect(0, 0, cv.width, cv.height);
+  splats = splats.filter(p => (p.l -= .004) > 0);
+  splats.forEach(p => {
+    cx.fillStyle = `rgba(150,40,25,${p.l})`;
+    cx.beginPath();
+    cx.ellipse(p.x, p.y, p.s * .9, p.s * .5, p.r, 0, 7);
+    cx.fill();
+  });
+  ants.forEach(drawAnt);
+}
+cv.addEventListener("pointerdown", e => {
+  if (!running) return;
+  const r = cv.getBoundingClientRect();
+  const x = (e.clientX - r.left) * cv.width / r.width;
+  const y = (e.clientY - r.top) * cv.height / r.height;
+  const i = ants.findIndex(a => Math.hypot(a.x - x, a.y - y) < a.s * 1.6);
+  if (i < 0) return;
+  const a = ants.splice(i, 1)[0];
+  splats.push({x: a.x, y: a.y, s: a.s, r: a.dir, l: 1});
+  score++;
+  $("gScore").textContent = "คะแนน " + score;
+});
+$("gStart").onclick = startGame;
+$("gModes").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  mode = b.dataset.m;
+  document.querySelectorAll("#gModes button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  resetGame();
+});
+popup.addEventListener("click", e => { if (e.target === popup) popup.close(); });
+popup.addEventListener("close", () => {
+  $("stage").innerHTML = "";
+  document.body.style.overflow = "";
+});
+
+const gameDlg = $("gameDlg");
+$("playGameBtn").onclick = () => { gameDlg.showModal(); resetGame(); };
+$("gameClose").onclick = () => gameDlg.close();
+gameDlg.addEventListener("click", e => { if (e.target === gameDlg) gameDlg.close(); });
+gameDlg.addEventListener("close", stopGame);
+addEventListener("resize", () => { if (gameDlg.open && !running) resetGame(); });
+
+const nav = $("navbar");
+addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 50), {passive: true});
+</script>
+</body>
+</html>
