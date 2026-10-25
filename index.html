@@ -122,6 +122,7 @@ footer{padding:48px 5%;text-align:center;border-top:1px solid rgba(255,255,255,.
     <p class="lead">ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง ร่วมค้นหาความจริงที่ถูกซ่อนไว้ภายใต้คำลวง</p>
     <div class="btns">
       <button class="btn btn-play" id="latestBtn"><svg class="i"><use href="#play"/></svg> รับชมตอนล่าสุด</button>
+      <button class="btn btn-info" id="trailerBtn"><svg class="i"><use href="#play"/></svg> ดูตัวอย่าง</button>
       <button class="btn btn-info" id="pickBtn"><svg class="i"><use href="#list"/></svg> เลือกตอน</button>
     </div>
   </div>
@@ -168,6 +169,7 @@ const shows = [{
   desc: "ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง",
   poster: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
   banner: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
+  trailer: "DhzPvYVh7n8", /* YouTube ID ของตัวอย่าง */
   episodes: [
     {season:1, ep:"EP.1",   title:"จุดเริ่มต้น",      dur:"2 นาที 49 วินาที", drive:"1M1cL2hv8oIWLR1ZdHWTXgIsMI4NYX4kY", poster:yt("uOlQF24CTXY"), desc:"ซีรีส์สืบสวนลึกลับสุดเข้มข้นที่เต็มไปด้วยปริศนาและความจริงที่ไม่มีใครคาดคิด"},
     {season:1, ep:"EP.2",   title:"ความจริงเริ่มเผย", dur:"2 นาที 48 วินาที", drive:"1tXGhOxXgfQvgZ-jDB-eBHi5exSBEk1Bc", poster:yt("WrFwGxEqB3M"), desc:"เมื่อทวีสันต์เริ่มเปิดโรงงาน และรับสมัครงาน ท่ามกลางสายตาที่จับจ้อง"},
@@ -213,7 +215,7 @@ function openShow(i, epIndex = -1) {
 }
 function showBanner() {
   $("stage").className = "stage";
-  $("stage").innerHTML = `<img src="${show.banner}" alt=""><div class="stage-text"><h2 id="pTitle">${show.title}</h2><p>${show.desc}</p></div>`;
+  $("stage").innerHTML = `<img src="${show.banner}" alt=""><div class="stage-text"><h2 id="pTitle">${show.title}</h2><p>${show.desc}</p><button class="btn btn-info trailer-btn" style="margin-top:12px"><svg class="i"><use href="#play"/></svg> ดูตัวอย่าง</button></div>`;
   $("now").hidden = true;
 }
 function renderEpisodes() {
@@ -251,6 +253,22 @@ $("seasons").addEventListener("click", e => {
 
 $("latestBtn").onclick = () => openShow(0, shows[0].episodes.length - 1);
 $("pickBtn").onclick = () => openShow(0);
+
+function playTrailer(i) {
+  openShow(i);
+  $("stage").className = "stage playing";
+  $("stage").innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${show.trailer}?autoplay=1&rel=0" title="ตัวอย่าง ${show.title}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  $("vTitle").textContent = `${show.title}: ตัวอย่าง`;
+  $("vEp").textContent = "Trailer";
+  $("vDur").textContent = "";
+  $("vRate").textContent = RATE;
+  $("vDesc").textContent = show.desc;
+  $("now").hidden = false;
+}
+$("trailerBtn").onclick = () => playTrailer(0);
+$("stage").addEventListener("click", e => {
+  if (e.target.closest(".trailer-btn")) playTrailer(shows.indexOf(show));
+});
 $("closeBtn").onclick = () => popup.close();
 popup.addEventListener("click", e => { if (e.target === popup) popup.close(); });
 popup.addEventListener("close", () => {
