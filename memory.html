@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>เกมจับคู่ภาพ | TrippleNCJ Studio</title>
+<meta name="description" content="เกมจับคู่ภาพจากซีรีส์ Breakpoint เล่นฟรีบนเว็บ">
+<meta name="theme-color" content="#080808">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="game.css">
+</head>
+<body>
+<header class="topbar"><a href="index.html">← กลับหน้าหลัก</a><h1>เกมจับคู่ภาพ</h1><span></span></header>
+<main class="game-page">
+  <div class="game-bar">
+    <span id="mMoves">ครั้ง 0</span><span id="mTime">เวลา 0</span>
+    <div class="seasons" id="mModes">
+      <button class="season-btn" data-p="6" aria-pressed="true">ง่าย</button>
+      <button class="season-btn" data-p="8" aria-pressed="false">ปกติ</button>
+    </div>
+  </div>
+  <div class="mem-wrap"><div id="mGrid"></div></div>
+  <p class="mem-win" id="mWin" hidden></p>
+  <p class="game-note">พลิกการ์ดเพื่อหาภาพคู่เดียวกัน ภาพมาจากตอนต่าง ๆ ของ Breakpoint · จับคู่ให้ครบด้วยจำนวนครั้งน้อยที่สุด</p>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+/* ===== เกมจับคู่ภาพ ===== */
+const YT_IDS = ["uOlQF24CTXY", "WrFwGxEqB3M", "wXiwxUFf1aU", "jd4Ia9OtpNs", "ZUU6_Heef8s", "AB5CFw8a8Wo", "XI034mQajes", "ic_CyQXVC2U", "Ce6Hx_Bn9uI"];
+const mGrid = $("mGrid");
+let mPairs = 6, mFirst = null, mLock = false, mMoves = 0, mMatched = 0, mSec = 0, mInt = 0;
+function memReset() {
+  clearInterval(mInt); mInt = 0;
+  mFirst = null; mLock = false; mMoves = 0; mMatched = 0; mSec = 0;
+  $("mMoves").textContent = "ครั้ง 0"; $("mTime").textContent = "เวลา 0"; $("mWin").hidden = true;
+  const imgs = YT_IDS.slice(0, mPairs).map(id => `https://img.youtube.com/vi/${id}/hqdefault.jpg`);
+  const deck = [...imgs, ...imgs].map((src, i) => ({src, k: i % imgs.length}));
+  for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
+  mGrid.innerHTML = deck.map(c => `<button class="mcard" data-k="${c.k}" aria-label="การ์ดปิดอยู่"><span class="mf mback">?</span><span class="mf mfront"><img src="${c.src}" alt="" loading="lazy"></span></button>`).join("");
+}
+mGrid.addEventListener("click", e => {
+  const c = e.target.closest(".mcard");
+  if (!c || mLock || c === mFirst || c.classList.contains("flip")) return;
+  if (!mInt) mInt = setInterval(() => { $("mTime").textContent = "เวลา " + (++mSec); }, 1000);
+  c.classList.add("flip");
+  if (!mFirst) { mFirst = c; return; }
+  mMoves++; $("mMoves").textContent = "ครั้ง " + mMoves;
+  if (mFirst.dataset.k === c.dataset.k) {
+    mFirst.classList.add("done"); c.classList.add("done"); mFirst = null;
+    if (++mMatched === mPairs) {
+      clearInterval(mInt); mInt = 0;
+      $("mWin").innerHTML = `🎉 สำเร็จ! ใช้ ${mMoves} ครั้ง ${mSec} วินาที <button class="btn btn-play" id="mAgain" style="padding:6px 16px">เล่นอีกครั้ง</button>`;
+      $("mWin").hidden = false;
+      $("mAgain").onclick = memReset;
+    }
+  } else {
+    mLock = true; const a = mFirst; mFirst = null;
+    setTimeout(() => { a.classList.remove("flip"); c.classList.remove("flip"); mLock = false; }, 800);
+  }
+});
+$("mModes").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  mPairs = +b.dataset.p;
+  document.querySelectorAll("#mModes button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  memReset();
+});
+memReset();
+</script>
+</body>
+</html>

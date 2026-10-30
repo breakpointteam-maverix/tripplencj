@@ -1,0 +1,44 @@
+/* ใช้ร่วมกันทุกหน้าเกม */
+:root{--bg:#080808;--card:#171717;--gold:#c9a35b;--gold-light:#e7c97b;--text:#f1ebde;--muted:#c5baa9;--line:rgba(201,163,91,.18)}
+*{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Kanit',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold-light);outline-offset:3px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 5%;border-bottom:1px solid var(--line);background:#050505}
+.topbar a{color:var(--gold);text-decoration:none;font-weight:600}
+.topbar h1{font-size:1.15rem}
+.game-page{max-width:900px;margin:24px auto;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 28px;border:0;border-radius:6px;font-weight:600;font-size:1.05rem;cursor:pointer;transition:background .2s,transform .2s}
+.btn:hover{transform:scale(1.04)}
+.btn-play{background:var(--text);color:#000}
+.btn-play:hover{background:var(--gold)}
+
+.seasons{display:flex;gap:8px;flex-wrap:wrap}
+.season-btn{padding:5px 14px;background:transparent;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.season-btn[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#000}
+
+/* GAME TESTER */
+.game-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 20px 10px;font-weight:600}
+.game-wrap{position:relative}
+#gCanvas{display:block;width:100%;height:min(60dvh,460px);touch-action:none;cursor:crosshair;background:#1b1409}
+#gStart{position:absolute;inset:0;margin:auto;width:max-content;height:max-content;text-align:center}
+#gStart[hidden]{display:none}
+.game-note{padding:12px 20px;color:var(--muted);font-size:.85rem}
+.game-note a{color:var(--gold)}
+
+
+/* MEMORY MATCH */
+.mem-wrap{padding:6px 20px 8px}
+#mGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:520px;margin:0 auto}
+.mcard{position:relative;aspect-ratio:16/10;border:0;padding:0;background:none;cursor:pointer;perspective:700px}
+.mf{position:absolute;inset:0;border-radius:8px;overflow:hidden;backface-visibility:hidden;transition:transform .4s;display:flex;align-items:center;justify-content:center}
+.mback{background:linear-gradient(135deg,var(--gold),#8d6a2b);color:#111;font-weight:600;font-size:1.6rem;border:1px solid var(--line)}
+.mfront{transform:rotateY(180deg);background:#000}
+.mfront img{width:100%;height:100%;object-fit:cover}
+.mcard.flip .mback{transform:rotateY(180deg)}
+.mcard.flip .mfront{transform:rotateY(0)}
+.mcard.done .mfront{box-shadow:0 0 0 2px var(--gold) inset}
+.mem-win{text-align:center;padding:10px 20px;color:var(--gold);font-weight:600}
+.mem-win button{margin-left:10px}
+
