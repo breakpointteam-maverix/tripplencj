@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin - TrippleNCJ</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #0f0f0f; color: #eee; padding: 24px; max-width: 900px; margin: 0 auto; }
+    h1, h2 { margin-bottom: 16px; }
+    input, textarea, select, button { width: 100%; padding: 10px 12px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #333; background: #1a1a1a; color: #eee; font-size: 15px; }
+    button { background: #c9a35b; color: #111; font-weight: 600; cursor: pointer; border: none; }
+    button:hover { background: #e7c97b; }
+    .card { background: #171717; padding: 20px; border-radius: 10px; margin-bottom: 24px; }
+    .hidden { display: none; }
+    .row { display: flex; gap: 12px; }
+    .row > * { flex: 1; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { padding: 8px; text-align: left; border-bottom: 1px solid #333; font-size: 14px; }
+    .danger { background: #b33; color: white; }
+    .success { color: #4caf50; margin-bottom: 12px; }
+    .error { color: #f44336; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+  <!-- Login -->
+  <div id="loginBox" class="card">
+    <h1>เข้าสู่ระบบ Admin</h1>
+    <input type="email" id="email" placeholder="อีเมล">
+    <input type="password" id="password" placeholder="รหัสผ่าน">
+    <button onclick="login()">เข้าสู่ระบบ</button>
+    <p id="loginMsg" class="error"></p>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="hidden">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <h1>หลังบ้าน TrippleNCJ</h1>
+      <button onclick="logout()" style="width:auto;padding:8px 16px">ออกจากระบบ</button>
+    </div>
+
+    <!-- เพิ่มหัวข้อใหม่ -->
+    <div class="card">
+      <h2>เพิ่มหัวข้อใหม่ (ซีรีส์)</h2>
+      <input id="showTitle" placeholder="ชื่อหัวข้อ เช่น Breakpoint Season 2">
+      <textarea id="showDesc" rows="2" placeholder="คำอธิบาย"></textarea>
+      <input id="showPoster" placeholder="ลิงก์โปสเตอร์ (หรือเว้นว่าง)">
+      <button onclick="addShow()">เพิ่มหัวข้อ</button>
+      <p id="showMsg"></p>
+    </div>
+
+    <!-- อัปโหลดคลิป -->
+    <div class="card">
+      <h2>อัปโหลดคลิป MP4</h2>
+      <select id="showSelect"></select>
+      <div class="row">
+        <input id="epSeason" type="number" value="1" placeholder="ซีซัน">
+        <input id="epNumber" type="number" placeholder="ตอนที่">
+      </div>
+      <input id="epTitle" placeholder="ชื่อตอน">
+      <textarea id="epDesc" rows="2" placeholder="คำอธิบายตอน"></textarea>
+      <input id="epDuration" placeholder="ความยาว เช่น 3 นาที 20 วินาที">
+      <input type="file" id="videoFile" accept="video/mp4">
+      <input id="epPoster" placeholder="ลิงก์โปสเตอร์ตอน (หรือเว้นว่าง)">
+      <button onclick="uploadEpisode()">อัปโหลดคลิป</button>
+      <p id="uploadMsg"></p>
+    </div>
+
+    <!-- รายการที่มีอยู่ -->
+    <div class="card">
+      <h2>รายการหัวข้อและตอน</h2>
+      <div id="list"></div>
+    </div>
+  </div>
+
+<script>
+  // ใส่ค่าของคุณตรงนี้
+  const SUPABASE_URL = 'https://xxxxx.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ตรวจสอบสถานะ login
+  async function checkAuth() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      document.getElementById('loginBox').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      loadShows();
+      loadList();
+    }
+  }
+
+  async function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      document.getElementById('loginMsg').textContent = error.message;
+    } else {
+      checkAuth();
+    }
+  }
+
+  async function logout() {
+    await supabase.auth.signOut();
+    location.reload();
+  }
+
+  async function loadShows() {
+    const { data } = await supabase.from('shows').select('*').order('created_at');
+    const select = document.getElementById('showSelect');
+    select.innerHTML = '<option value="">-- เลือกหัวข้อ --</option>';
+    data.forEach(s => {
+      select.innerHTML += `<option value="${s.id}">${s.title}</option>`;
+    });
+  }
+
+  async function addShow() {
+    const title = document.getElementById('showTitle').value.trim();
+    if (!title) return alert('กรุณาใส่ชื่อหัวข้อ');
+    const { error } = await supabase.from('shows').insert({
+      title,
+      description: document.getElementById('showDesc').value,
+      poster_url: document.getElementById('showPoster').value || null
+    });
+    if (error) {
+      document.getElementById('showMsg').innerHTML = `<span class="error">${error.message}</span>`;
+    } else {
+      document.getElementById('showMsg').innerHTML = `<span class="success">เพิ่มหัวข้อเรียบร้อย</span>`;
+      document.getElementById('showTitle').value = '';
+      document.getElementById('showDesc').value = '';
+      document.getElementById('showPoster').value = '';
+      loadShows();
+      loadList();
+    }
+  }
+
+  async function uploadEpisode() {
+    const showId = document.getElementById('showSelect').value;
+    const file = document.getElementById('videoFile').files[0];
+    const title = document.getElementById('epTitle').value.trim();
+    const epNumber = document.getElementById('epNumber').value;
+
+    if (!showId || !file || !title || !epNumber) {
+      return alert('กรุณากรอกข้อมูลให้ครบและเลือกไฟล์ MP4');
+    }
+
+    document.getElementById('uploadMsg').textContent = 'กำลังอัปโหลด... กรุณารอ';
+
+    // อัปโหลดไฟล์
+    const fileName = `${Date.now()}_${file.name.replace(/\s/g, '_')}`;
+    const { error: uploadError } = await supabase.storage
+      .from('videos')
+      .upload(fileName, file);
+
+    if (uploadError) {
+      document.getElementById('uploadMsg').innerHTML = `<span class="error">${uploadError.message}</span>`;
+      return;
+    }
+
+    // เอา public URL
+    const { data: { publicUrl } } = supabase.storage.from('videos').getPublicUrl(fileName);
+
+    // บันทึกข้อมูลตอน
+    const { error } = await supabase.from('episodes').insert({
+      show_id: showId,
+      season: parseInt(document.getElementById('epSeason').value) || 1,
+      episode_number: parseInt(epNumber),
+      title,
+      description: document.getElementById('epDesc').value,
+      duration: document.getElementById('epDuration').value,
+      video_url: publicUrl,
+      poster_url: document.getElementById('epPoster').value || null,
+      sort_order: parseInt(epNumber)
+    });
+
+    if (error) {
+      document.getElementById('uploadMsg').innerHTML = `<span class="error">${error.message}</span>`;
+    } else {
+      document.getElementById('uploadMsg').innerHTML = `<span class="success">อัปโหลดสำเร็จ!</span>`;
+      document.getElementById('epTitle').value = '';
+      document.getElementById('epDesc').value = '';
+      document.getElementById('epNumber').value = '';
+      document.getElementById('videoFile').value = '';
+      loadList();
+    }
+  }
+
+  async function loadList() {
+    const { data: shows } = await supabase.from('shows').select('*, episodes(*)').order('created_at');
+    let html = '';
+    shows.forEach(show => {
+      html += `<h3 style="margin:16px 0 8px">${show.title}</h3>`;
+      if (show.episodes.length === 0) {
+        html += '<p style="color:#888">ยังไม่มีตอน</p>';
+      } else {
+        html += '<table><tr><th>ตอน</th><th>ชื่อ</th><th>ความยาว</th><th></th></tr>';
+        show.episodes.sort((a,b) => a.sort_order - b.sort_order).forEach(ep => {
+          html += `<tr>
+            <td>S${ep.season} EP.${ep.episode_number}</td>
+            <td>${ep.title}</td>
+            <td>${ep.duration || '-'}</td>
+            <td><button class="danger" style="width:auto;padding:4px 10px" onclick="deleteEpisode('${ep.id}')">ลบ</button></td>
+          </tr>`;
+        });
+        html += '</table>';
+      }
+    });
+    document.getElementById('list').innerHTML = html || '<p>ยังไม่มีข้อมูล</p>';
+  }
+
+  async function deleteEpisode(id) {
+    if (!confirm('ต้องการลบตอนนี้ใช่ไหม?')) return;
+    await supabase.from('episodes').delete().eq('id', id);
+    loadList();
+  }
+
+  checkAuth();
+</script>
+</body>
+</html>
