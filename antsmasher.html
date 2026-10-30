@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ant Smasher: Arcade Edition</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #e6d5b8; /* Picnic blanket color */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            cursor: crosshair;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            font-size: 24px;
+            font-weight: bold;
+            color: #3e2723;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+        }
+
+        #start-screen, #game-over-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        h1 { font-size: 4rem; margin-bottom: 10px; color: #ff6b6b; text-shadow: 2px 2px #000; }
+        p { font-size: 1.5rem; margin-bottom: 30px; }
+        
+        button {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            box-shadow: 0 4px 0 #c92a2a;
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #c92a2a;
+        }
+
+        button:hover {
+            background: #ff8787;
+        }
+
+        .hidden { display: none !important; }
+        
+        /* Custom Cursor Logic handled in JS, but fallback here */
+        canvas { cursor: none; }
+    </style>
+</head>
+<body>
+
+    <!-- UI Overlay -->
+    <div id="ui-layer">
+        <div class="hud">
+            <div id="score-display">Score: 0</div>
+            <div id="lives-display">Lives: 5</div>
+        </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="start-screen">
+        <h1>ANT SMASHER</h1>
+        <p>Don't let them steal the picnic food!</p>
+        <button onclick="startGame()">START GAME</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="hidden">
+        <h1>GAME OVER</h1>
+        <p>Final Score: <span id="final-score">0</span></p>
+        <button onclick="resetGame()">TRY AGAIN</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+<script>
+    /**
+     * AUDIO SYSTEM (Synthesizer)
+     * Generates sounds on the fly so no external files are needed.
+     */
+    const AudioSys = {
+        ctx: null,
+        init: function() {
+            window.AudioContext = window.AudioContext || window.webkitAudioContext;
+            this.ctx = new AudioContext();
+        },
+        playSquash: function() {
+            if (!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, this.ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.1);
+        },
+        playMiss: function() {
+            if (!this.ctx) return;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+            osc.frequency.linearRampToValueAtTime(50, this.ctx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.2);
+        }
+    };
+
+    /**
+     * GAME ENGINE
+     */
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Game State
+    let gameState = 'MENU'; // MENU, PLAYING, GAMEOVER
+    let score = 0;
+    let lives = 5;
+    let lastTime = 0;
+    let spawnTimer = 0;
+    let spawnInterval = 2000; // ms
+    let difficultyMultiplier = 1;
+
+    // Entities
+    let ants = [];
+    let particles = [];
+    let mouse = { x: -100, y: -100, down: false };
+
+    // Resize handling
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Input handling
+    window.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+    window.addEventListener('mousedown', () => {
+        mouse.down = true;
+        checkHit();
+        setTimeout(() => mouse.down = false, 100); // Reset quickly for visual effect
+    });
+    window.addEventListener('touchstart', e => {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+        mouse.down = true;
+        checkHit();
+        setTimeout(() => mouse.down = false, 100);
+    });
+
+    /**
+     * CLASSES
+     */
+    class Ant {
+        constructor() {
+            this.radius = 15;
+            // Spawn at random edge
+            if (Math.random() < 0.5) {
+                this.x = Math.random() < 0.5 ? -20 : canvas.width + 20;
+                this.y = Math.random() * canvas.height;
+            } else {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() < 0.5 ? -20 : canvas.height + 20;
+            }
+
+            // Target a random point near the center (the "Picnic Basket")
+            const targetX = canvas.width / 2 + (Math.random() - 0.5) * 200;
+            const targetY = canvas.height / 2 + (Math.random() - 0.5) * 200;
+            
+            const angle = Math.atan2(targetY - this.y, targetX - this.x);
+            const speed = (1 + Math.random() * 2) * difficultyMultiplier;
+
+            this.vx = Math.cos(angle) * speed;
+            this.vy = Math.sin(angle) * speed;
+            
+            this.wobbleOffset = Math.random() * 100;
+            this.dead = false;
+            this.rotation = angle;
+        }
+
+        update(dt) {
+            // Add some erratic movement
+            const wobble = Math.sin((Date.now() / 100) + this.wobbleOffset) * 0.5;
+            
+            this.x += this.vx + wobble;
+            this.y += this.vy + wobble;
+            this.rotation = Math.atan2(this.vy, this.vx);
+
+            // Check if reached center (Game logic: lose life)
+            const distToCenter = Math.hypot(this.x - canvas.width/2, this.y - canvas.height/2);
+            if (distToCenter < 50) {
+                this.dead = true;
+                loseLife();
+            }
+
+            // Remove if off screen (far off)
+            if (this.x < -100 || this.x > canvas.width + 100 || this.y < -100 || this.y > canvas.height + 100) {
+                this.dead = true;
+            }
+        }
+
+        draw(ctx) {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.rotation);
+
+            // Body
+            ctx.fillStyle = '#3e2723';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 15, 8, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Head
+            ctx.beginPath();
+            ctx.arc(12, 0, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Legs (animated)
+            ctx.strokeStyle = '#3e2723';
+            ctx.lineWidth = 2;
+            const legMove = Math.sin(Date.now() / 50) * 5;
+            
+            // Left legs
+            ctx.beginPath(); ctx.moveTo(-5, -5); ctx.lineTo(-10 - legMove, -12); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, -5); ctx.lineTo(0 - legMove, -12); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(5, -5); ctx.lineTo(10 - legMove, -12); ctx.stroke();
+            
+            // Right legs
+            ctx.beginPath(); ctx.moveTo(-5, 5); ctx.lineTo(-10 + legMove, 12); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, 5); ctx.lineTo(0 + legMove, 12); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(5, 5); ctx.lineTo(10 + legMove, 12); ctx.stroke();
+
+            // Antennae
+            ctx.beginPath(); ctx.moveTo(15, -2); ctx.lineTo(22, -6); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(15, 2); ctx.lineTo(22, 6); ctx.stroke();
+
+            ctx.restore();
+        }
+    }
+
+    class Particle {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.vx = (Math.random() - 0.5) * 10;
+            this.vy = (Math.random() - 0.5) * 10;
+            this.life = 1.0;
+            this.color = `hsl(${Math.random()*50}, 70%, 50%)`; // Reddish/Brownish
+            this.size = Math.random() * 4 + 2;
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.life -= 0.05;
+        }
+        draw(ctx) {
+            ctx.globalAlpha = this.life;
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+        }
+    }
+
+    /**
+     * GAME LOGIC
+     */
+
+    function startGame() {
+        AudioSys.init();
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-over-screen').classList.add('hidden');
+        
+        score = 0;
+        lives = 5;
+        difficultyMultiplier = 1;
+        ants = [];
+        particles = [];
+        updateHUD();
+        gameState = 'PLAYING';
+        lastTime = performance.now();
+        requestAnimationFrame(gameLoop);
+    }
+
+    function resetGame() {
+        startGame();
+    }
+
+    function loseLife() {
+        lives--;
+        AudioSys.playMiss();
+        updateHUD();
+        
+        // Screen shake effect
+        canvas.style.transform = `translate(${Math.random()*10-5}px, ${Math.random()*10-5}px)`;
+        setTimeout(() => canvas.style.transform = 'none', 50);
+
+        if (lives <= 0) {
+            gameOver();
+        }
+    }
+
+    function gameOver() {
+        gameState = 'GAMEOVER';
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('game-over-screen').classList.remove('hidden');
+    }
+
+    function updateHUD() {
+        document.getElementById('score-display').innerText = `Score: ${score}`;
+        document.getElementById('lives-display').innerText = `Lives: ${'❤️'.repeat(lives)}`;
+    }
+
+    function checkHit() {
+        if (gameState !== 'PLAYING') return;
+
+        let hit = false;
+        // Iterate backwards to remove safely
+        for (let i = ants.length - 1; i >= 0; i--) {
+            const ant = ants[i];
+            const dist = Math.hypot(mouse.x - ant.x, mouse.y - ant.y);
+            
+            // Generous hit box
+            if (dist < 40) {
+                // Squash!
+                createExplosion(ant.x, ant.y);
+                ants.splice(i, 1);
+                score += 10;
+                
+                // Increase difficulty every 50 points
+                if (score % 50 === 0) {
+                    difficultyMultiplier += 0.2;
+                    spawnInterval = Math.max(500, 2000 - (score * 5));
+                }
+                
+                updateHUD();
+                AudioSys.playSquash();
+                hit = true;
+            }
+        }
+    }
+
+    function createExplosion(x, y) {
+        for(let i=0; i<8; i++) {
+            particles.push(new Particle(x, y));
+        }
+    }
+
+    function drawBackground() {
+        // Draw a subtle grid/picnic pattern
+        ctx.fillStyle = '#e6d5b8';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.strokeStyle = '#dcc0a0';
+        ctx.lineWidth = 2;
+        const gridSize = 50;
+        
+        ctx.beginPath();
+        for(let x=0; x<canvas.width; x+=gridSize) {
+            ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height);
+        }
+        for(let y=0; y<canvas.height; y+=gridSize) {
+            ctx.moveTo(0, y); ctx.lineTo(canvas.width, y);
+        }
+        ctx.stroke();
+
+        // Draw the "Picnic Basket" in the center
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        
+        // Basket
+        ctx.fillStyle = '#8d5524';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 40, 0, Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle = '#5c3a1e';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        
+        // Handle
+        ctx.beginPath();
+        ctx.arc(cx, cy, 30, Math.PI, 0);
+        ctx.stroke();
+    }
+
+    function drawCursor() {
+        // Draw a shoe or hammer representation
+        ctx.save();
+        ctx.translate(mouse.x, mouse.y);
+        
+        // Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        ctx.beginPath();
+        ctx.ellipse(5, 5, 20, 10, 0, 0, Math.PI*2);
+        ctx.fill();
+
+        // The "Smasher" (Shoe sole shape)
+        ctx.fillStyle = mouse.down ? '#ff4444' : '#ff6b6b'; // Redder when clicking
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 20, 30, Math.PI / 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#c92a2a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Laces detail
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(-5, -10); ctx.lineTo(5, 0);
+        ctx.moveTo(-5, -5); ctx.lineTo(5, 5);
+        ctx.stroke();
+
+        ctx.restore();
+    }
+
+    function gameLoop(timestamp) {
+        if (gameState !== 'PLAYING') return;
+
+        const dt = timestamp - lastTime;
+        lastTime = timestamp;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawBackground();
+
+        // Spawning Logic
+        spawnTimer += dt;
+        if (spawnTimer > spawnInterval) {
+            ants.push(new Ant());
+            spawnTimer = 0;
+        }
+
+        // Update & Draw Ants
+        ants.forEach(ant => {
+            ant.update(dt);
+            ant.draw(ctx);
+        });
+        // Clean up dead ants
+        ants = ants.filter(a => !a.dead);
+
+        // Update & Draw Particles
+        particles.forEach(p => {
+            p.update();
+            p.draw(ctx);
+        });
+        particles = particles.filter(p => p.life > 0);
+
+        // Draw Cursor last so it's on top
+        drawCursor();
+
+        requestAnimationFrame(gameLoop);
+    }
+
+</script>
+</body>
+</html>
