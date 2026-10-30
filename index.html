@@ -171,35 +171,14 @@ footer{padding:48px 5%;text-align:center;border-top:1px solid rgba(255,255,255,.
   </div>
 </dialog>
 
-
-
 <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 <script>
 const CREDITS = "Nikonpan, Nasa and Newtun";
 const RATE = "13+";
 const yt = id => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
-/* เพิ่มซีรีส์ใหม่: copy ก้อนนี้ไปต่อท้ายใน shows
-   poster = รูปโปสเตอร์แนวตั้ง 2:3 (เช่น "poster-breakpoint.jpg") */
-const shows = [{
-  id: "breakpoint",
-  title: "Breakpoint",
-  desc: "ซีรีส์สืบสวนลึกลับที่พาคุณดิ่งลึกสู่ปริศนาและการหักหลัง",
-  poster: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
-  banner: "https://img.youtube.com/vi/uOlQF24CTXY/maxresdefault.jpg",
-  trailer: "DhzPvYVh7n8", /* YouTube ID ของตัวอย่าง */
-  episodes: [
-    {season:1, ep:"EP.1",   title:"จุดเริ่มต้น",      dur:"2 นาที 49 วินาที", drive:"1M1cL2hv8oIWLR1ZdHWTXgIsMI4NYX4kY", vid:"uOlQF24CTXY", poster:yt("uOlQF24CTXY"), desc:"ซีรีส์สืบสวนลึกลับสุดเข้มข้นที่เต็มไปด้วยปริศนาและความจริงที่ไม่มีใครคาดคิด"},
-    {season:1, ep:"EP.2",   title:"ความจริงเริ่มเผย", dur:"2 นาที 48 วินาที", drive:"1tXGhOxXgfQvgZ-jDB-eBHi5exSBEk1Bc", vid:"WrFwGxEqB3M", poster:yt("WrFwGxEqB3M"), desc:"เมื่อทวีสันต์เริ่มเปิดโรงงาน และรับสมัครงาน ท่ามกลางสายตาที่จับจ้อง"},
-    {season:1, ep:"EP.3",   title:"อดีตที่ถูกซ่อน",   dur:"3 นาที 22 วินาที", drive:"1QSghpbLTKyA4dYDtRCRPGU9bW7Df0mbT", vid:"wXiwxUFf1aU", poster:yt("wXiwxUFf1aU"), desc:"ทวีสันต์โดนภัทรนนท์หักหลัง ความเชื่อใจที่เคยมีเริ่มพังทลาย"},
-    {season:1, ep:"EP.3.5", title:"ตอนพิเศษ",         dur:"2 นาที 30 วินาที", drive:"1aTSr6A76VQRE_aCqNTdwnT6XaiIm7uWA", vid:"jd4Ia9OtpNs", poster:yt("jd4Ia9OtpNs"), desc:"เบื้องหลังและมุมมองอีกด้านที่ความจริงอาจไม่ได้มีเพียงด้านเดียว"},
-    {season:1, ep:"EP.4",   title:"จุดแตกหัก",        dur:"2 นาที 50 วินาที", drive:"1KUG1p_iyLd57gBE4h44fpMKn2Qia5sqU", vid:"ZUU6_Heef8s", poster:yt("ZUU6_Heef8s"), desc:"ทุกคนเริ่มไม่ไว้ใจกัน บรรยากาศแห่งความหวาดระแวงเข้าปกคลุม"},
-    {season:1, ep:"EP.5",   title:"ตอนที่ 5",         dur:"3 นาที 23 วินาที", drive:"1x_oCOGmxQXn53Hn_f2SEov9rRf4pd3_r", vid:"AB5CFw8a8Wo", poster:yt("AB5CFw8a8Wo"), desc:"ทวีสันต์ไม่มีทางไปต่อ"},
-    {season:1, ep:"EP.6",   title:"ตอนที่ 6",         dur:"4 นาที 29 วินาที", drive:"1Dw2sSX2bwdQ1yJcB1DsyImvlSD-p2K3l", vid:"XI034mQajes", poster:yt("XI034mQajes"), desc:"ทวีสันต์ถูกรักพาตัว"},
-    {season:1, ep:"EP.7",   title:"ตอนที่ 7",         dur:"5 นาที 57 วินาที", drive:"1fDn1dq-QPFeQOKaKyZpHa1xO2iPflRrO", vid:"ic_CyQXVC2U", poster:yt("ic_CyQXVC2U"), desc:"ทวีสันต์รับสมัครพนักงานเพิ่ม"},
-    {season:1, ep:"EP.8",   title:"ตอนที่ 8",         dur:"6 นาที 17 วินาที", drive:"1D8eyfB3-ZhmmPOQud8qLybTuWcGDvBgZ", vid:"Ce6Hx_Bn9uI", poster:yt("Ce6Hx_Bn9uI"), desc:"เคนขึ้นมารับหน้าที่แทนคณิต"}
-  ]
-}];
+const DB_URL = "https://tripplencj-default-rtdb.asia-southeast1.firebasedatabase.app/shows.json";
+let shows = [];
 
 const $ = id => document.getElementById(id);
 
@@ -241,14 +220,29 @@ function mountPlayer(ytId, fallbackSrc, title) {
   });
 }
 const popup = $("popup");
-let show = shows[0], season = 1, playing = -1;
+let show = null, season = 1, playing = -1;
+
+/* Fetch shows from Database */
+async function loadShows() {
+  try {
+    const res = await fetch(DB_URL);
+    const data = await res.json();
+    shows = Array.isArray(data) ? data : Object.values(data || {});
+    renderPosters();
+  } catch (err) {
+    console.error("Failed to load shows:", err);
+  }
+}
 
 /* Poster grid */
-$("posters").innerHTML = shows.map((s, i) => `
-  <button class="poster" data-i="${i}" aria-label="${s.title} เลือกตอน">
-    <img src="${s.poster}" alt="" loading="lazy">
-    <span class="poster-info"><b>${s.title}</b><small>${s.episodes.length} ตอน</small></span>
-  </button>`).join("");
+function renderPosters() {
+  $("posters").innerHTML = shows.map((s, i) => `
+    <button class="poster" data-i="${i}" aria-label="${s.title} เลือกตอน">
+      <img src="${s.poster}" alt="" loading="lazy">
+      <span class="poster-info"><b>${s.title}</b><small>${(s.episodes || []).length} ตอน</small></span>
+    </button>`).join("");
+}
+
 $("posters").addEventListener("click", e => {
   const b = e.target.closest(".poster");
   if (b) openShow(+b.dataset.i);
@@ -257,10 +251,10 @@ $("posters").addEventListener("click", e => {
 /* Popup */
 function openShow(i, epIndex = -1) {
   show = shows[i];
-  const seasons = [...new Set(show.episodes.map(e => e.season))].sort((a, b) => a - b);
+  const seasons = [...new Set((show.episodes || []).map(e => e.season))].sort((a, b) => a - b);
   $("seasons").innerHTML = seasons.map(s => `<button class="season-btn" data-s="${s}">Season ${s}</button>`).join("");
   $("vCredits").textContent = CREDITS;
-  season = seasons[0];
+  season = seasons[0] || 1;
   playing = -1;
   showBanner();
   renderEpisodes();
@@ -276,9 +270,9 @@ function showBanner() {
 }
 function renderEpisodes() {
   document.querySelectorAll(".season-btn").forEach(b => b.setAttribute("aria-pressed", +b.dataset.s === season));
-  $("episodes").innerHTML = show.episodes.map((e, i) => e.season !== season ? "" : `
+  $("episodes").innerHTML = (show.episodes || []).map((e, i) => e.season !== season ? "" : `
     <button class="ep-row" data-i="${i}" aria-current="${i === playing}">
-      <img src="${e.poster}" alt="" width="112" height="63" loading="lazy">
+      <img src="${e.poster || yt(e.vid)}" alt="" width="112" height="63" loading="lazy">
       <div><h4>${e.ep}: ${e.title}</h4><p>${e.desc}</p></div>
       <span class="ep-dur">${e.dur}</span>
     </button>`).join("");
@@ -306,7 +300,6 @@ $("seasons").addEventListener("click", e => {
   if (b) { season = +b.dataset.s; renderEpisodes(); }
 });
 
-
 function playTrailer(i) {
   openShow(i);
   playing = -1; /* ตัวอย่างไม่ต้องเล่นต่อตอนถัดไป */
@@ -323,7 +316,6 @@ $("stage").addEventListener("click", e => {
 });
 $("closeBtn").onclick = () => popup.close();
 
-
 popup.addEventListener("click", e => { if (e.target === popup) popup.close(); });
 popup.addEventListener("close", () => {
   destroyPlayer();
@@ -333,6 +325,8 @@ popup.addEventListener("close", () => {
 
 const nav = $("navbar");
 addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 50), {passive: true});
+
+loadShows();
 </script>
 </body>
 </html>
