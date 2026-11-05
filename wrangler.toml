@@ -1,0 +1,17 @@
+name = "tripplencj-slip"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+SLIPOK_BRANCH_ID = "80271"
+RECEIVER_KEYWORD = "ส่วนหนึ่งของชื่อผู้รับที่ขึ้นในสลิป"
+ALLOWED_ORIGIN = "https://tripplencj.online"
+
+[[kv_namespaces]]
+binding = "DONATIONS"
+id = "ใส่ id หลังรัน: npx wrangler kv namespace create DONATIONS"
+
+# ตั้ง API key แบบลับ (ไม่ใส่ในไฟล์นี้):
+#   npx wrangler secret put SLIPOK_API_KEY
+# deploy:
+#   npx wrangler deploy
